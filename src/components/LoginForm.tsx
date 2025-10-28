@@ -9,7 +9,7 @@ import { useLoginMutation } from '@/hooks/api/Auth/useLogin'
 
 const schema = z.object({
   email: z.email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters long'),
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
 })
 
 export function LoginForm({
@@ -21,12 +21,13 @@ export function LoginForm({
 
   const form = useAppForm({
     defaultValues: {
-      email: 'john@example.com',
-      password: 'Jet1234A!',
+      email: '',
+      password: '',
     },
     validators: {
       onBlur: schema,
     },
+    canSubmitWhenInvalid: false,
     onSubmit: async ({ value }) => {
       try {
         const { data: res } = await mutateAsync(value, {

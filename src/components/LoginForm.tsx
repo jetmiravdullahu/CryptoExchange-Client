@@ -25,7 +25,7 @@ export function LoginForm({
       password: '',
     },
     validators: {
-      onBlur: schema,
+      onSubmit: schema,
     },
     canSubmitWhenInvalid: false,
     onSubmit: async ({ value }) => {

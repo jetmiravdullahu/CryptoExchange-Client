@@ -5,7 +5,7 @@ import { Label } from './ui/label'
 import { SelectInput } from './ui/select'
 import type { IGetAssetOptionsResponseData } from '@/api/Asset/getAssetOptions'
 import { useGetAssetOptions } from '@/hooks/api/Asset/useGetAssetOptionsQuery'
-import { useGetCurrentExchangeRate } from '@/hooks/api/ExchangeRate/useGetCurrentExchangeRate'
+import { useGetCurrentExchangeRateSuspenseQuery } from '@/hooks/api/ExchangeRate/useGetCurrentExchangeRate'
 
 export const CurrencyConverter = ({
   fromAmount,
@@ -29,7 +29,7 @@ export const CurrencyConverter = ({
   handleSwapAssets: () => Promise<void>
 }) => {
   const { data: assetOptions } = useGetAssetOptions()
-  const { data: currentExchangeRate } = useGetCurrentExchangeRate({
+  const { data: currentExchangeRate } = useGetCurrentExchangeRateSuspenseQuery({
     from_asset_id: fromAsset.value,
     to_asset_id: toAsset.value,
   })
@@ -59,10 +59,10 @@ export const CurrencyConverter = ({
             placeholder="0.00"
             value={fromAmount}
             onChange={(e) => {
-              if (!currentExchangeRate?.rate) return
+              if (!currentExchangeRate.rate) return
               handleFromValueChange(e.target.value)
             }}
-            disabled={!currentExchangeRate?.rate}
+            disabled={!currentExchangeRate.rate}
             className="text-lg h-14 pr-16"
           />
         </div>
@@ -105,10 +105,10 @@ export const CurrencyConverter = ({
             value={toAmount}
             className="text-lg h-14 pr-16"
             onChange={(e) => {
-              if (!currentExchangeRate?.rate) return
+              if (!currentExchangeRate.rate) return
               handleToValueChange(e.target.value)
             }}
-            disabled={!currentExchangeRate?.rate}
+            disabled={!currentExchangeRate.rate}
           />
         </div>
       </div>

@@ -13,11 +13,13 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
 import { Route as AuthDashboardRouteImport } from './routes/_auth/dashboard'
+import { Route as AuthDashboardIndexRouteImport } from './routes/_auth/dashboard/index'
 import { Route as AuthExchangeConfirmationTransactionIdRouteImport } from './routes/_auth/exchange-confirmation.$transactionId'
 import { Route as AuthDashboardUsersRouteImport } from './routes/_auth/dashboard/users'
 import { Route as AuthDashboardTransfersRouteImport } from './routes/_auth/dashboard/transfers'
 import { Route as AuthDashboardTransactionsRouteImport } from './routes/_auth/dashboard/transactions'
 import { Route as AuthDashboardNotificationsRouteImport } from './routes/_auth/dashboard/notifications'
+import { Route as AuthDashboardCorrectionsRouteImport } from './routes/_auth/dashboard/corrections'
 import { Route as AuthDashboardAccountsRouteImport } from './routes/_auth/dashboard/accounts'
 import { Route as AuthDashboardSuperadminRouteImport } from './routes/_auth/dashboard/_superadmin'
 import { Route as AuthDashboardLocationsIndexRouteImport } from './routes/_auth/dashboard/locations/index'
@@ -43,6 +45,11 @@ const AuthDashboardRoute = AuthDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthRoute,
+} as any)
+const AuthDashboardIndexRoute = AuthDashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthDashboardRoute,
 } as any)
 const AuthExchangeConfirmationTransactionIdRoute =
   AuthExchangeConfirmationTransactionIdRouteImport.update({
@@ -70,6 +77,12 @@ const AuthDashboardNotificationsRoute =
   AuthDashboardNotificationsRouteImport.update({
     id: '/notifications',
     path: '/notifications',
+    getParentRoute: () => AuthDashboardRoute,
+  } as any)
+const AuthDashboardCorrectionsRoute =
+  AuthDashboardCorrectionsRouteImport.update({
+    id: '/corrections',
+    path: '/corrections',
     getParentRoute: () => AuthDashboardRoute,
   } as any)
 const AuthDashboardAccountsRoute = AuthDashboardAccountsRouteImport.update({
@@ -111,11 +124,13 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthDashboardSuperadminRouteWithChildren
   '/': typeof AuthIndexRoute
   '/dashboard/accounts': typeof AuthDashboardAccountsRoute
+  '/dashboard/corrections': typeof AuthDashboardCorrectionsRoute
   '/dashboard/notifications': typeof AuthDashboardNotificationsRoute
   '/dashboard/transactions': typeof AuthDashboardTransactionsRoute
   '/dashboard/transfers': typeof AuthDashboardTransfersRoute
   '/dashboard/users': typeof AuthDashboardUsersRoute
   '/exchange-confirmation/$transactionId': typeof AuthExchangeConfirmationTransactionIdRoute
+  '/dashboard/': typeof AuthDashboardIndexRoute
   '/dashboard/assets': typeof AuthDashboardAssetsIndexRoute
   '/dashboard/locations': typeof AuthDashboardLocationsIndexRoute
   '/dashboard/assets/$asset_id/exchange-rates': typeof AuthDashboardSuperadminAssetsAsset_idExchangeRatesRoute
@@ -123,9 +138,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
-  '/dashboard': typeof AuthDashboardSuperadminRouteWithChildren
   '/': typeof AuthIndexRoute
+  '/dashboard': typeof AuthDashboardIndexRoute
   '/dashboard/accounts': typeof AuthDashboardAccountsRoute
+  '/dashboard/corrections': typeof AuthDashboardCorrectionsRoute
   '/dashboard/notifications': typeof AuthDashboardNotificationsRoute
   '/dashboard/transactions': typeof AuthDashboardTransactionsRoute
   '/dashboard/transfers': typeof AuthDashboardTransfersRoute
@@ -144,11 +160,13 @@ export interface FileRoutesById {
   '/_auth/': typeof AuthIndexRoute
   '/_auth/dashboard/_superadmin': typeof AuthDashboardSuperadminRouteWithChildren
   '/_auth/dashboard/accounts': typeof AuthDashboardAccountsRoute
+  '/_auth/dashboard/corrections': typeof AuthDashboardCorrectionsRoute
   '/_auth/dashboard/notifications': typeof AuthDashboardNotificationsRoute
   '/_auth/dashboard/transactions': typeof AuthDashboardTransactionsRoute
   '/_auth/dashboard/transfers': typeof AuthDashboardTransfersRoute
   '/_auth/dashboard/users': typeof AuthDashboardUsersRoute
   '/_auth/exchange-confirmation/$transactionId': typeof AuthExchangeConfirmationTransactionIdRoute
+  '/_auth/dashboard/': typeof AuthDashboardIndexRoute
   '/_auth/dashboard/assets/': typeof AuthDashboardAssetsIndexRoute
   '/_auth/dashboard/locations/': typeof AuthDashboardLocationsIndexRoute
   '/_auth/dashboard/_superadmin/assets/$asset_id/exchange-rates': typeof AuthDashboardSuperadminAssetsAsset_idExchangeRatesRoute
@@ -161,11 +179,13 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/'
     | '/dashboard/accounts'
+    | '/dashboard/corrections'
     | '/dashboard/notifications'
     | '/dashboard/transactions'
     | '/dashboard/transfers'
     | '/dashboard/users'
     | '/exchange-confirmation/$transactionId'
+    | '/dashboard/'
     | '/dashboard/assets'
     | '/dashboard/locations'
     | '/dashboard/assets/$asset_id/exchange-rates'
@@ -173,9 +193,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
-    | '/dashboard'
     | '/'
+    | '/dashboard'
     | '/dashboard/accounts'
+    | '/dashboard/corrections'
     | '/dashboard/notifications'
     | '/dashboard/transactions'
     | '/dashboard/transfers'
@@ -193,11 +214,13 @@ export interface FileRouteTypes {
     | '/_auth/'
     | '/_auth/dashboard/_superadmin'
     | '/_auth/dashboard/accounts'
+    | '/_auth/dashboard/corrections'
     | '/_auth/dashboard/notifications'
     | '/_auth/dashboard/transactions'
     | '/_auth/dashboard/transfers'
     | '/_auth/dashboard/users'
     | '/_auth/exchange-confirmation/$transactionId'
+    | '/_auth/dashboard/'
     | '/_auth/dashboard/assets/'
     | '/_auth/dashboard/locations/'
     | '/_auth/dashboard/_superadmin/assets/$asset_id/exchange-rates'
@@ -239,6 +262,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/dashboard/': {
+      id: '/_auth/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthDashboardIndexRouteImport
+      parentRoute: typeof AuthDashboardRoute
+    }
     '/_auth/exchange-confirmation/$transactionId': {
       id: '/_auth/exchange-confirmation/$transactionId'
       path: '/exchange-confirmation/$transactionId'
@@ -272,6 +302,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/dashboard/notifications'
       preLoaderRoute: typeof AuthDashboardNotificationsRouteImport
+      parentRoute: typeof AuthDashboardRoute
+    }
+    '/_auth/dashboard/corrections': {
+      id: '/_auth/dashboard/corrections'
+      path: '/corrections'
+      fullPath: '/dashboard/corrections'
+      preLoaderRoute: typeof AuthDashboardCorrectionsRouteImport
       parentRoute: typeof AuthDashboardRoute
     }
     '/_auth/dashboard/accounts': {
@@ -340,10 +377,12 @@ const AuthDashboardSuperadminRouteWithChildren =
 interface AuthDashboardRouteChildren {
   AuthDashboardSuperadminRoute: typeof AuthDashboardSuperadminRouteWithChildren
   AuthDashboardAccountsRoute: typeof AuthDashboardAccountsRoute
+  AuthDashboardCorrectionsRoute: typeof AuthDashboardCorrectionsRoute
   AuthDashboardNotificationsRoute: typeof AuthDashboardNotificationsRoute
   AuthDashboardTransactionsRoute: typeof AuthDashboardTransactionsRoute
   AuthDashboardTransfersRoute: typeof AuthDashboardTransfersRoute
   AuthDashboardUsersRoute: typeof AuthDashboardUsersRoute
+  AuthDashboardIndexRoute: typeof AuthDashboardIndexRoute
   AuthDashboardAssetsIndexRoute: typeof AuthDashboardAssetsIndexRoute
   AuthDashboardLocationsIndexRoute: typeof AuthDashboardLocationsIndexRoute
 }
@@ -351,10 +390,12 @@ interface AuthDashboardRouteChildren {
 const AuthDashboardRouteChildren: AuthDashboardRouteChildren = {
   AuthDashboardSuperadminRoute: AuthDashboardSuperadminRouteWithChildren,
   AuthDashboardAccountsRoute: AuthDashboardAccountsRoute,
+  AuthDashboardCorrectionsRoute: AuthDashboardCorrectionsRoute,
   AuthDashboardNotificationsRoute: AuthDashboardNotificationsRoute,
   AuthDashboardTransactionsRoute: AuthDashboardTransactionsRoute,
   AuthDashboardTransfersRoute: AuthDashboardTransfersRoute,
   AuthDashboardUsersRoute: AuthDashboardUsersRoute,
+  AuthDashboardIndexRoute: AuthDashboardIndexRoute,
   AuthDashboardAssetsIndexRoute: AuthDashboardAssetsIndexRoute,
   AuthDashboardLocationsIndexRoute: AuthDashboardLocationsIndexRoute,
 }

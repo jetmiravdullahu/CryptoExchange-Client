@@ -25,9 +25,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { PostErrorComponent } from '@/components/PostErrorComponent'
+import { LoadingSpinner } from '@/components/LoadingComponent'
 
 export const Route = createFileRoute('/_auth/dashboard/notifications')({
   component: RouteComponent,
+  loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData(
+      getNotificationsQuery(),
+    )
+  },
+  errorComponent: PostErrorComponent,
+  pendingComponent: LoadingSpinner,
 })
 
 const severityColors = {

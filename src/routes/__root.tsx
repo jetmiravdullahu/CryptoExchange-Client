@@ -1,5 +1,6 @@
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import {
+  HeadContent,
   Outlet,
   createRootRouteWithContext,
   useRouterState,
@@ -28,6 +29,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     return (
       <>
         <ThemeProvider>
+          <HeadContent />
           {isLoading && <LoadingSpinner />}
           <Outlet />
           <Toaster position="top-center" />

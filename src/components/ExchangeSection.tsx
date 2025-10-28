@@ -96,10 +96,10 @@ export const ExchangeSection = () => {
       <Card className="lg:col-span-2 relative">
         <CardHeader>
           <CardTitle>Convert Currency</CardTitle>
-          {!!exchangeRate && (
+          {!!currentExchangeRate.rate && (
             <CardDescription>
               Exchange rate: 1 {assetFrom.label} ={' '}
-              {Number(exchangeRate).toFixed(2)} {assetTo.label}
+              {Number(currentExchangeRate.rate).toFixed(2)} {assetTo.label}
             </CardDescription>
           )}
         </CardHeader>

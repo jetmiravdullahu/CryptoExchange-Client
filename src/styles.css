@@ -17,7 +17,6 @@ code {
   font-family:
     source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
-
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.2079 0.0399 265.7275);
@@ -25,8 +24,8 @@ code {
   --card-foreground: oklch(0.2079 0.0399 265.7275);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.2079 0.0399 265.7275);
-  --primary: oklch(0.5905 0.2097 303.5671);
-  --primary-foreground: oklch(0.9838 0.0035 247.8583);
+  --primary: oklch(0.8317 0.1664 86.6984);
+  --primary-foreground: oklch(0.2079 0.0399 265.7275);
   --secondary: oklch(0.9684 0.0068 247.8951);
   --secondary-foreground: oklch(0.2079 0.0399 265.7275);
   --muted: oklch(0.9684 0.0068 247.8951);
@@ -37,7 +36,7 @@ code {
   --destructive-foreground: oklch(0.9838 0.0035 247.8583);
   --border: oklch(0.929 0.0126 255.5317);
   --input: oklch(0.929 0.0126 255.5317);
-  --ring: oklch(0.5905 0.2097 303.5671);
+  --ring: oklch(0.8317 0.1664 86.6984);
   --chart-1: oklch(0.7208 0.1219 181.2398);
   --chart-2: oklch(0.6057 0.1157 235.7234);
   --chart-3: oklch(0.6125 0.1968 353.8401);
@@ -45,12 +44,12 @@ code {
   --chart-5: oklch(0.5002 0.2156 282.9404);
   --sidebar: oklch(0.9684 0.0068 247.8951);
   --sidebar-foreground: oklch(0.2079 0.0399 265.7275);
-  --sidebar-primary: oklch(0.5905 0.2097 303.5671);
-  --sidebar-primary-foreground: oklch(0.9838 0.0035 247.8583);
+  --sidebar-primary: oklch(0.8317 0.1664 86.6984);
+  --sidebar-primary-foreground: oklch(0.2079 0.0399 265.7275);
   --sidebar-accent: oklch(0.9432 0.0123 247.9574);
   --sidebar-accent-foreground: oklch(0.2079 0.0399 265.7275);
   --sidebar-border: oklch(0.8754 0.0223 255.5796);
-  --sidebar-ring: oklch(0.5905 0.2097 303.5671);
+  --sidebar-ring: oklch(0.8317 0.1664 86.6984);
   --font-sans: Inter;
   --font-serif: Playfair Display;
   --font-mono: Fira Code;
@@ -84,38 +83,38 @@ code {
 }
 
 .dark {
-  --background: oklch(0.1405 0.0044 285.8238);
+  --background: oklch(0.2079 0.0399 265.7275);
   --foreground: oklch(0.9838 0.0035 247.8583);
-  --card: oklch(0.1405 0.0044 285.8238);
+  --card: oklch(0.2079 0.0399 265.7275);
   --card-foreground: oklch(0.9838 0.0035 247.8583);
-  --popover: oklch(0.1405 0.0044 285.8238);
+  --popover: oklch(0.2079 0.0399 265.7275);
   --popover-foreground: oklch(0.9838 0.0035 247.8583);
-  --primary: oklch(0.4211 0.1579 293.8464);
-  --primary-foreground: oklch(0.9838 0.0035 247.8583);
-  --secondary: oklch(0.2362 0.0125 285.401);
+  --primary: oklch(0.8317 0.1664 86.6984);
+  --primary-foreground: oklch(0.2079 0.0399 265.7275);
+  --secondary: oklch(0.28 0.0369 259.974);
   --secondary-foreground: oklch(0.9838 0.0035 247.8583);
-  --muted: oklch(0.2362 0.0125 285.401);
+  --muted: oklch(0.28 0.0369 259.974);
   --muted-foreground: oklch(0.7107 0.0351 256.7877);
-  --accent: oklch(0.2362 0.0125 285.401);
+  --accent: oklch(0.28 0.0369 259.974);
   --accent-foreground: oklch(0.9838 0.0035 247.8583);
-  --destructive: oklch(49.474% 0.17345 26.311);
+  --destructive: oklch(0.3959 0.1331 25.7205);
   --destructive-foreground: oklch(0.9838 0.0035 247.8583);
-  --border: oklch(0.2362 0.0125 285.401);
-  --input: oklch(0.2362 0.0125 285.401);
-  --ring: oklch(0.4211 0.1579 293.8464);
+  --border: oklch(0.28 0.0369 259.974);
+  --input: oklch(0.28 0.0369 259.974);
+  --ring: oklch(0.8317 0.1664 86.6984);
   --chart-1: oklch(0.7208 0.1219 181.2398);
   --chart-2: oklch(0.6057 0.1157 235.7234);
   --chart-3: oklch(0.6125 0.1968 353.8401);
   --chart-4: oklch(0.7506 0.1284 81.6193);
   --chart-5: oklch(0.5002 0.2156 282.9404);
-  --sidebar: oklch(0.1857 0.0082 285.5695);
+  --sidebar: oklch(0.2558 0.0324 259.9923);
   --sidebar-foreground: oklch(0.9838 0.0035 247.8583);
-  --sidebar-primary: oklch(0.4569 0.1735 293.6963);
-  --sidebar-primary-foreground: oklch(0.9838 0.0035 247.8583);
-  --sidebar-accent: oklch(0.257 0.0143 285.3525);
+  --sidebar-primary: oklch(0.8317 0.1664 86.6984);
+  --sidebar-primary-foreground: oklch(0.2079 0.0399 265.7275);
+  --sidebar-accent: oklch(0.3037 0.0413 259.9592);
   --sidebar-accent-foreground: oklch(0.9838 0.0035 247.8583);
-  --sidebar-border: oklch(0.305 0.0182 285.2681);
-  --sidebar-ring: oklch(0.4569 0.1735 293.6963);
+  --sidebar-border: oklch(0.3498 0.0499 259.9372);
+  --sidebar-ring: oklch(0.8317 0.1664 86.6984);
   --font-sans: Inter;
   --font-serif: Playfair Display;
   --font-mono: Fira Code;

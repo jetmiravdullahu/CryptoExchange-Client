@@ -115,7 +115,7 @@ export function TextArea({
   const errors = useStore(field.store, (state) => state.meta.errors)
 
   return (
-    <div>
+    <div className="">
       <LabelMessage label={label} />
       <ShadcnTextarea
         id={label}

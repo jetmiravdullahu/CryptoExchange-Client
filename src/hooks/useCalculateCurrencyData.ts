@@ -300,6 +300,13 @@ export const useExchangeCalculator = (
       amountFromInput: amountFrom,
       newExchangeRate: parseFloat(rate),
     })
+
+    if (exchangeRate && parseFloat(rate) !== exchangeRate) {
+      alert(
+        'Exchange rate has changed. Please review the amounts before proceeding.',
+      )
+    }
+
     setExchangeRate(parseFloat(rate))
     setAssetFromState(asset)
     setAmountFromState(amountFrom)
@@ -361,7 +368,7 @@ export const useExchangeCalculator = (
 
   const handleSwapAssets = async (): Promise<void> => {
     let rate = '0'
-    
+
     try {
       if (assetTo.value !== assetFrom.value) {
         const rateResp = await queryClient.ensureQueryData(
@@ -413,6 +420,6 @@ export const useExchangeCalculator = (
 
     // Calculated results
     calculatedFee,
-    handleSwapAssets
+    handleSwapAssets,
   }
 }

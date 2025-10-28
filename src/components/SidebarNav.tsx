@@ -2,6 +2,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, useRouterState } from '@tanstack/react-router'
 import {
   ArrowLeftRight,
+  Eraser,
   MapPin,
   Package,
   Receipt,
@@ -38,6 +39,11 @@ const navigation = [
     href: '/dashboard/transfers',
     icon: ArrowLeftRight,
   },
+  {
+    name: 'Corrections',
+    href: '/dashboard/corrections',
+    icon: Eraser,
+  },
 ]
 
 export const SidebarNav = ({
@@ -68,13 +74,14 @@ export const SidebarNav = ({
             key={item.name}
             to={item.href}
             onClick={() => mobile && setMobileOpen(false)}
+            preloadDelay={300}
           >
             <Button
               variant={isActive ? 'secondary' : 'ghost'}
               className={cn(
                 'w-full justify-start gap-3',
                 isActive &&
-                  'bg-primary text-sidebar-accent hover:text-primary dark:text-sidebar-foreground',
+                  'bg-primary text-sidebar-foreground! hover:text-sidebar-primary! dark:text-sidebar-accent',
                 !mobile && isCollapsed && 'justify-center px-2',
               )}
             >

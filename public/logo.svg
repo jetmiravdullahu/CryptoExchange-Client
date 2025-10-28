@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1"
+   width="2560"
+   height="1440"
+   viewBox="1050 490 460 460"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs id="defs1" />
+  <g id="layer-MC0">
+    <path
+       id="path1"
+       d="M 0,0 -88,-88 -117.33,-58.67 -58.66,0 -117.33,58.67 -88,88 Z"
+       style="fill:#f9bb2b;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,1241.28,720)" />
+    <path
+       id="path2"
+       d="M 0,0 -29.33,-29.33 -58.67,0 -29.33,29.33 Z"
+       style="fill:#f9bb2b;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,1084.8399,720)" />
+    <path
+       id="path3"
+       d="M 0,0 -88,88 -58.67,117.33 0,58.66 58.67,117.33 88,88 Z"
+       style="fill:#f9bb2b;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,1280.6667,680.8932)" />
+    <path
+       id="path4"
+       d="M 0,0 -29.33,29.33 0,58.67 29.33,29.33 Z"
+       style="fill:#f9bb2b;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,1280.6667,524.45307)" />
+    <path
+       id="path5"
+       d="M 0,0 88,88 117.33,58.67 58.66,0 117.33,-58.67 88,-88 Z"
+       style="fill:#f9bb2b;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,1319.7735,720)" />
+    <path
+       id="path6"
+       d="M 0,0 29.33,29.33 58.67,0 29.33,-29.33 Z"
+       style="fill:#f9bb2b;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,1476.2136,720)" />
+    <path
+       id="path7"
+       d="M 0,0 88,-88 58.67,-117.33 0,-58.66 -58.67,-117.33 -88,-88 Z"
+       style="fill:#f9bb2b;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,1280,759.1068)" />
+    <path
+       id="path8"
+       d="M 0,0 29.33,-29.33 0,-58.67 -29.33,-29.33 Z"
+       style="fill:#f9bb2b;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,1280,915.54693)" />
+  </g>
+</svg>

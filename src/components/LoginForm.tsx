@@ -62,9 +62,8 @@ export function LoginForm({
               <div className="flex size-8 items-center justify-center rounded-md">
                 <GalleryVerticalEnd className="size-6" />
               </div>
-              <span className="sr-only">Acme Inc.</span>
             </a>
-            <h1 className="text-xl font-bold">Welcome to TRESOREX</h1>
+            <h1 className="text-xl font-bold">Welcome to TRESORX</h1>
           </div>
           <form.AppField name="email">
             {(field) => <field.TextField label="Email" />}

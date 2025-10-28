@@ -1,5 +1,6 @@
 import { Suspense, useState } from 'react'
 import {
+  Link,
   Outlet,
   createFileRoute,
   redirect,
@@ -39,11 +40,6 @@ export const Route = createFileRoute('/_auth/dashboard')({
       throw redirect({
         to: '/',
       })
-
-    // 🧭 Redirect only when landing exactly on /dashboard
-    if (location.pathname === '/dashboard') {
-      throw redirect({ to: '/dashboard/users' })
-    }
   },
 })
 
@@ -73,7 +69,12 @@ function RouteComponent() {
         {/* Sidebar Header */}
         <div className="flex h-16 items-center justify-between border-b px-4">
           {!isCollapsed && (
-            <h1 className="text-lg font-bold text-foreground">Dashboard</h1>
+            <Link
+              to="/dashboard"
+              className="text-lg font-bold text-foreground cursor-pointer"
+            >
+              Dashboard
+            </Link>
           )}
           <Button
             variant="ghost"
@@ -142,7 +143,12 @@ function RouteComponent() {
             </SheetTrigger>
             <SheetContent side="left" className="w-64 p-0">
               <div className="flex h-16 items-center border-b px-4">
-                <h1 className="text-lg font-bold text-foreground">Dashboard</h1>
+                <Link
+                  to="/dashboard"
+                  className="text-lg font-bold text-foreground cursor-pointer"
+                >
+                  Dashboard
+                </Link>
               </div>
               <div className="py-4">
                 <SidebarNav

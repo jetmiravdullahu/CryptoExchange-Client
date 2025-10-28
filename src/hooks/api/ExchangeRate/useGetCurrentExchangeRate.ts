@@ -19,6 +19,8 @@ export const getCurrentExchangeRateQuery = ({
       if (error?.response?.data?.success === false) return false
       return failureCount < 3
     },
+    staleTime: 60000, // 1 minute
+    refetchInterval: 60000, // 1 minute
   })
 
 export const useGetCurrentExchangeRate = ({
@@ -28,12 +30,12 @@ export const useGetCurrentExchangeRate = ({
   from_asset_id: string
   to_asset_id: string
 }) => {
-  return useQuery(
-    getCurrentExchangeRateQuery({
+  return useQuery({
+    ...getCurrentExchangeRateQuery({
       from_asset_id,
       to_asset_id,
     }),
-  )
+  })
 }
 
 export const useGetCurrentExchangeRateSuspenseQuery = ({

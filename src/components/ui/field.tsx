@@ -1,5 +1,6 @@
 import { useMemo } from "react"
-import { cva, type VariantProps } from "class-variance-authority"
+import {  cva } from "class-variance-authority"
+import type {VariantProps} from "class-variance-authority";
 
 import { cn } from "@/lib/utils"
 import { Label } from "@/components/ui/label"
@@ -198,7 +199,7 @@ function FieldError({
       return null
     }
 
-    if (errors?.length === 1 && errors[0]?.message) {
+    if (errors.length === 1 && errors[0]?.message) {
       return errors[0].message
     }
 

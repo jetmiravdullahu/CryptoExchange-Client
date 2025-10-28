@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp, Pencil } from 'lucide-react'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import {
   flexRender,
   getCoreRowModel,

@@ -1,7 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Plus } from 'lucide-react'
 import { TransactionsTable } from '@/components/Dashboard/Transactions/TransactionsTable'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -53,13 +51,6 @@ function RouteComponent() {
                 Manage transactions and permissions
               </CardDescription>
             </div>
-            <Button
-              className="gap-2"
-              // onClick={() => setActionUser(initialUserData)}
-            >
-              <Plus className="h-4 w-4" />
-              Add Transaction
-            </Button>
           </div>
         </CardHeader>
         <CardContent>
@@ -75,18 +66,6 @@ function RouteComponent() {
           </div>
         </CardContent>
       </Card>
-      {/* {actionUser && (
-        <UserFormDialog
-          open={!!actionUser}
-          onOpenChange={setActionUser}
-          initialData={{
-            ...actionUser,
-            password: '',
-            password_confirmation: '',
-          }}
-          isEdit={!!actionUser.id}
-        />
-      )} */}
     </div>
   )
 }

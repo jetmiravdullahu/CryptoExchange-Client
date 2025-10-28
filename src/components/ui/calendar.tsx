@@ -124,40 +124,54 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        Root: ({ className, rootRef, ...props }) => {
+        Root: ({
+          className: componentClassName,
+          rootRef,
+          ...componentProps
+        }) => {
           return (
             <div
               data-slot="calendar"
               ref={rootRef}
-              className={cn(className)}
-              {...props}
+              className={cn(componentClassName)}
+              {...componentProps}
             />
           )
         },
-        Chevron: ({ className, orientation, ...props }) => {
+        Chevron: ({
+          className: componentClassName,
+          orientation,
+          ...componentProps
+        }) => {
           if (orientation === 'left') {
             return (
-              <ChevronLeftIcon className={cn('size-4', className)} {...props} />
+              <ChevronLeftIcon
+                className={cn('size-4', componentClassName)}
+                {...componentProps}
+              />
             )
           }
 
           if (orientation === 'right') {
             return (
               <ChevronRightIcon
-                className={cn('size-4', className)}
-                {...props}
+                className={cn('size-4', componentClassName)}
+                {...componentProps}
               />
             )
           }
 
           return (
-            <ChevronDownIcon className={cn('size-4', className)} {...props} />
+            <ChevronDownIcon
+              className={cn('size-4', componentClassName)}
+              {...componentProps}
+            />
           )
         },
         DayButton: CalendarDayButton,
-        WeekNumber: ({ children, ...props }) => {
+        WeekNumber: ({ children, ...componentProps }) => {
           return (
-            <td {...props}>
+            <td {...componentProps}>
               <div className="flex size-(--cell-size) items-center justify-center text-center">
                 {children}
               </div>

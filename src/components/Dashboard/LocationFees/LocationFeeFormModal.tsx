@@ -56,7 +56,6 @@ export function LocationFeeFormDialog({
           const val = flattened[key as keyof typeof flattened]
           errors[key] = Array.isArray(val) ? val.join(', ') : (val as any)
         }
-        console.log('errors', { errors })
         return {
           form: 'Invalid data',
           fields: errors,

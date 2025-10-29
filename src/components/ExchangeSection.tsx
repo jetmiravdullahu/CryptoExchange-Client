@@ -19,6 +19,7 @@ import { useExchangeCalculator } from '@/hooks/useCalculateCurrencyData'
 import { useGetCurrentExchangeRateSuspenseQuery } from '@/hooks/api/ExchangeRate/useGetCurrentExchangeRate'
 import { useGetCurrentLocationFeeSuspenseQuery } from '@/hooks/api/LocationFee/useGetCurrentLocationFee'
 import { getTransactionQuery } from '@/hooks/api/Transaction/useGetTransaction'
+import { getTransactionsQuery } from '@/hooks/api/Transaction/useGetTransactions'
 
 export const ExchangeSection = () => {
   const navigate = useNavigate()
@@ -47,9 +48,7 @@ export const ExchangeSection = () => {
     setFeeType,
     feeValue,
     setFeeValue,
-
     exchangeRate,
-
     handleSwapAssets,
     calculatedFee,
   } = useExchangeCalculator({
@@ -59,7 +58,7 @@ export const ExchangeSection = () => {
   })
 
   const handleReviewTrade = () => {
-    if (!amountFrom || !amountTo || !currentExchangeRate.rate) {
+    if (!amountFrom || !amountTo || !exchangeRate) {
       toast.error('Please enter valid amounts to trade.')
       return
     }
@@ -74,15 +73,19 @@ export const ExchangeSection = () => {
         from_amount: parseFloat(amountFrom),
         to_amount: parseFloat(amountTo),
         location_id: currentLocationFee.location_id,
-        rate_value: parseFloat(currentExchangeRate.rate),
+        rate_value: exchangeRate,
       },
       {
         onSuccess: (response) => {
-          console.log('Transaction created:', { response })
           queryClient.setQueryData(
             getTransactionQuery(response.data.id).queryKey,
             response.data,
           )
+
+          queryClient.invalidateQueries({
+            queryKey: getTransactionsQuery().queryKey
+          })
+
           navigate({
             to: `/exchange-confirmation/${response.data.id}`,
           })
@@ -96,10 +99,10 @@ export const ExchangeSection = () => {
       <Card className="lg:col-span-2 relative">
         <CardHeader>
           <CardTitle>Convert Currency</CardTitle>
-          {!!currentExchangeRate.rate && (
+          {!!exchangeRate && (
             <CardDescription>
               Exchange rate: 1 {assetFrom.label} ={' '}
-              {Number(currentExchangeRate.rate).toFixed(2)} {assetTo.label}
+              {Number(exchangeRate).toFixed(2)} {assetTo.label}
             </CardDescription>
           )}
         </CardHeader>
@@ -118,7 +121,7 @@ export const ExchangeSection = () => {
             />
           </Suspense>
 
-          {(!!parseFloat(amountFrom) && !!parseFloat(amountTo)) && (
+          {!!parseFloat(amountFrom) && !!parseFloat(amountTo) && (
             <div className="pt-4 border-t">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">

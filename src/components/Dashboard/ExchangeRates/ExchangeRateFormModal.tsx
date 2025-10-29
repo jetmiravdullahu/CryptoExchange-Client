@@ -92,8 +92,6 @@ export function ExchangeRateFormDialog({
   })
   const fromAsset = assetOptions.find((asset) => asset.value === assetId)
 
-  console.log({ assetOptions, fromAsset })
-
   const effectiveFrom = useStore(form.store).values.effective_from
 
   return (

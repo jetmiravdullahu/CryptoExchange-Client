@@ -35,7 +35,6 @@ export const TransferFormModal = ({
   const { data: assetOptions } = useGetAssetOptions()
   const { data: locationOptions } = useGetLocationOptions()
 
-  console.log({currentUser})
 
   const { mutate: createTransfer } = useCreateTransferMutation()
 
@@ -61,7 +60,6 @@ export const TransferFormModal = ({
           const val = flattened[key as keyof typeof flattened]
           errors[key] = Array.isArray(val) ? val.join(', ') : (val as any)
         }
-        console.log('Validation errors:', { errors })
         return {
           form: 'Invalid data',
           fields: errors,

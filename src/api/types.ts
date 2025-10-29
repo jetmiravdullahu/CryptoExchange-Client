@@ -6,11 +6,13 @@ export interface SuccessResponse<T> {
 
 export interface PaginatedResponse<T> extends SuccessResponse<IPagination<T>> {}
 
-export interface ErrorResponse {
+export interface ErrorResponse<T> {
   message: string
+  success: false
+  data: T
 }
 
-export interface ValidationErrorResponse<T> extends ErrorResponse {
+export interface ValidationErrorResponse<T> extends ErrorResponse<T> {
   errors: ValidationErrors<T>
 }
 

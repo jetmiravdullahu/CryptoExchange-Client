@@ -21,6 +21,8 @@ import { TimerComponent } from '@/components/TimerComponent'
 import { useCancelTransactionMutation } from '@/hooks/api/Transaction/useCancelTransaction'
 import { useCompleteTransactionMutation } from '@/hooks/api/Transaction/useConfirmTransaction'
 import { useTimeoutTransactionMutation } from '@/hooks/api/Transaction/useTimeoutTransaction'
+import { getAccountsQuery } from '@/hooks/api/Account/useGetAccounts'
+import { getTransactionsQuery } from '@/hooks/api/Transaction/useGetTransactions'
 
 export const Route = createFileRoute(
   '/_auth/exchange-confirmation/$transactionId',
@@ -60,7 +62,7 @@ function RouteComponent() {
   const [showError, setShowError] = useState(false)
 
   const { mutate: completeMutation } = useCompleteTransactionMutation()
-  const { mutate: cancelMutation } = useCancelTransactionMutation()
+  const { mutateAsync: cancelMutation } = useCancelTransactionMutation()
   const { mutate: timeoutMutation } = useTimeoutTransactionMutation()
 
   const [expired, setExpired] = useState(false)
@@ -71,8 +73,11 @@ function RouteComponent() {
         transactionId: exchangeData.id,
       },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           toast.error('Transaction cancelled due to time expiration.')
+          await queryClient.invalidateQueries({
+            queryKey: getTransactionsQuery().queryKey,
+          })
         },
       },
     )
@@ -88,7 +93,12 @@ function RouteComponent() {
         setTimeout(() => {
           navigate({ to: '/' })
         }, 3000)
-        await queryClient.invalidateQueries({ queryKey: ['getAccounts'] })
+        await queryClient.invalidateQueries({
+          queryKey: getAccountsQuery.queryKey,
+        })
+        await queryClient.invalidateQueries({
+          queryKey: getTransactionsQuery().queryKey,
+        })
       },
       onError: () => {
         setShowError(true)
@@ -99,22 +109,24 @@ function RouteComponent() {
     })
   }
 
-  const handleCancel = () => {
-    navigate({ to: '/' })
-
+  const handleCancel = async () => {
+    console.log({ expired })
     if (expired) return
-
-    cancelMutation(
+    await cancelMutation(
       {
         transactionId: exchangeData.id,
         cancellation_reason: 'User Cancelled',
       },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           toast.success('Transaction cancelled successfully.')
+          await queryClient.invalidateQueries({
+            queryKey: getTransactionsQuery().queryKey,
+          })
         },
       },
     )
+    navigate({ to: '/' })
   }
 
   return (
@@ -135,7 +147,7 @@ function RouteComponent() {
                 </CardDescription>
               </div>
               {!showSuccess && !showError && (
-                <TimerComponent initialTime={5} onExpire={handleExpire} />
+                <TimerComponent initialTime={300} onExpire={handleExpire} />
               )}
             </div>
           </CardHeader>

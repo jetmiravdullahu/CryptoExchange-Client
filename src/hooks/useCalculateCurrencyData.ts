@@ -148,13 +148,6 @@ export const useExchangeCalculator = (
     else {
       rawTo = amountFromNum * newExchangeRate
       fee = calculateFee({ amount: rawTo, feeTypeInput, feeValueInput })
-      console.log('rawTo', {
-        rawTo,
-        feeTypeInput,
-        feeValueInput,
-        fee,
-        newExchangeRate,
-      })
       finalTo = rawTo - fee
     }
 
@@ -293,19 +286,11 @@ export const useExchangeCalculator = (
       console.error('Error fetching exchange rate:', error)
     }
 
-    console.log('rate', rate)
-
     const { result, fee } = calculateForward({
       assetFromInput: asset,
       amountFromInput: amountFrom,
       newExchangeRate: parseFloat(rate),
     })
-
-    if (exchangeRate && parseFloat(rate) !== exchangeRate) {
-      alert(
-        'Exchange rate has changed. Please review the amounts before proceeding.',
-      )
-    }
 
     setExchangeRate(parseFloat(rate))
     setAssetFromState(asset)
@@ -330,8 +315,6 @@ export const useExchangeCalculator = (
     } catch (error) {
       console.error('Error fetching exchange rate:', error)
     }
-
-    console.log('rate', rate)
 
     const { result, fee } = calculateForward({
       assetFromInput: assetFrom,

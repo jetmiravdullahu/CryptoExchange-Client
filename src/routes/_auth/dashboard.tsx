@@ -30,7 +30,6 @@ export const Route = createFileRoute('/_auth/dashboard')({
     const cachedUser = context.queryClient.getQueryData(
       currentUserQuery.queryKey,
     )?.user
-    console.log({ cachedUser })
     if (!cachedUser)
       throw redirect({
         to: '/login',

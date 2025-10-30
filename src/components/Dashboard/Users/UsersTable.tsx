@@ -47,7 +47,7 @@ export function UsersTable({
 }) {
   const queryClient = useQueryClient()
 
-  const { mutate: deleteUser } = useDeleteUserMutation()
+  const { mutate: deleteUser } = useDeleteUserMutation() 
 
   const getRoleBadgeVariant = (role: UserRole) => {
     switch (role) {
@@ -109,10 +109,10 @@ export function UsersTable({
         header: () => <span>Role</span>,
       },
       {
-        accessorKey: 'location_id',
+        accessorKey: 'location',
         cell: (info) => {
           return (
-            info.getValue() || (
+            info.getValue()?.name || (
               <span className="text-muted-foreground/50">—</span>
             )
           )

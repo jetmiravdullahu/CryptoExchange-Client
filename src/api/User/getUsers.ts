@@ -1,6 +1,7 @@
 import api from '..'
 import type { UserRole } from '@/types/user'
 import type { PaginatedResponse } from '../types'
+import type { ILocation } from '@/types/location'
 
 interface IGetUsersResponseData {
   id: string
@@ -8,6 +9,7 @@ interface IGetUsersResponseData {
   name: string
   role: UserRole
   location_id: string | null
+  location?: ILocation
   is_active: boolean
   email_verified_at: string | null
   last_login_at: string | null

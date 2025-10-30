@@ -19,7 +19,7 @@ import type {
   SortingState,
 } from '@tanstack/react-table'
 
-import type { LocationFormData, LocationTableData } from '@/types/location'
+import type { ILocation, LocationFormData } from '@/types/location'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -44,7 +44,7 @@ export function LocationsTable({
   sorting,
   setSorting,
 }: {
-  locations: Array<LocationTableData>
+  locations: Array<ILocation>
   setActionLocation: (user: LocationFormData | null) => void
   totalLocations: number
   pagination: PaginationState
@@ -71,11 +71,11 @@ export function LocationsTable({
       )
     }
   }
-  const openEditDialog = (location: LocationTableData) => {
+  const openEditDialog = (location: ILocation) => {
     setActionLocation(location)
   }
 
-  const columns = useMemo<Array<ColumnDef<LocationTableData, any>>>(
+  const columns = useMemo<Array<ColumnDef<ILocation, any>>>(
     () => [
       {
         accessorKey: 'name',

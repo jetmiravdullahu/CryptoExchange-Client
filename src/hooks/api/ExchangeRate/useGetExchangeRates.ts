@@ -59,7 +59,7 @@ const initialPagination: PaginationState = {
 
 const initialSorting: SortingState = [
   {
-    id: 'id',
+    id: 'created_at',
     desc: true,
   },
 ]

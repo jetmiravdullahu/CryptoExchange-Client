@@ -1,13 +1,13 @@
-import { TanStackDevtools } from '@tanstack/react-devtools'
+// import { TanStackDevtools } from '@tanstack/react-devtools'
 import {
   HeadContent,
   Outlet,
   createRootRouteWithContext,
   useRouterState,
 } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+// import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
-import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
+// import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import type { QueryClient } from '@tanstack/react-query'
 import { currentUserQuery } from '@/hooks/api/Auth/useGetCurrentUser'
 import { ThemeProvider } from '@/hooks/ThemeProvider'
@@ -34,7 +34,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
           <Outlet />
           <Toaster position="top-center" />
         </ThemeProvider>
-        <TanStackDevtools
+        {/* <TanStackDevtools
           config={{
             position: 'bottom-right',
             openHotkey: [],
@@ -46,7 +46,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
             },
             TanStackQueryDevtools,
           ]}
-        />
+        /> */}
       </>
     )
   },

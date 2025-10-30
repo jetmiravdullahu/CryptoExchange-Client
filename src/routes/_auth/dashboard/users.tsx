@@ -81,9 +81,9 @@ function RouteComponent() {
         <CardContent>
           <div className="rounded-md border px-4">
             <UsersTable
-              users={data.users}
+              users={data.data}
               setActionUser={setActionUser}
-              totalUsers={data.pagination.total}
+              totalUsers={data.total}
               pagination={pagination}
               setPagination={setPagination}
               sorting={sorting}

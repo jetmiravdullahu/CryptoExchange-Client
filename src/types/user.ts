@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import type { ILocation } from './location'
 
 export type UserRole = 'ADMIN' | 'SUPER_ADMIN' | 'SELLER'
 
@@ -59,24 +60,16 @@ export type UserFormData = {
   is_active: boolean
 }
 
-export type UserTableData = {
-  id: string
-  name: string
-  email: string
-  role: UserRole
-  location: string | null
-  is_active: boolean
-}
-
 export interface IUser {
   id: string
   email: string
   name: string
   role: UserRole
-  location_id: string
+  location_id: string | null
   is_active: boolean
   email_verified_at: string | null
   last_login_at: string | null
+  location: ILocation | null
   metadata: Array<Record<string, any>>
   created_at: string
   updated_at: string

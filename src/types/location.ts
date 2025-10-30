@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import type { FeeType } from './locationFee'
+import type { IUser } from './user'
 
 export const LocationSchema = z
   .object({
@@ -72,6 +73,7 @@ export type ILocation = {
   city: string
   country_code: string | null
   timezone: string
+  user: IUser
   is_active: boolean
   metadata: Array<Record<string, any>>
   created_at: string

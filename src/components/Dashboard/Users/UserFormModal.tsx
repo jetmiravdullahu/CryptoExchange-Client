@@ -152,6 +152,7 @@ export function UserFormDialog({
               {(field) => (
                 <field.Select
                   label="Role"
+                  disabled={isEdit}
                   options={[
                     { label: 'Seller', value: 'SELLER' },
                     { label: 'Admin', value: 'ADMIN' },

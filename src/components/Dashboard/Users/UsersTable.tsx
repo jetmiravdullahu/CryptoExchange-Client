@@ -12,7 +12,7 @@ import type {
   SortingState,
 } from '@tanstack/react-table'
 
-import type { UserFormData, UserRole, UserTableData } from '@/types/user'
+import type { IUser, UserFormData, UserRole } from '@/types/user'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -37,7 +37,7 @@ export function UsersTable({
   sorting,
   setSorting,
 }: {
-  users: Array<UserTableData>
+  users: Array<IUser>
   setActionUser: (user: UserFormData | null) => void
   totalUsers: number
   pagination: PaginationState
@@ -84,7 +84,7 @@ export function UsersTable({
     })
   }
 
-  const columns = useMemo<Array<ColumnDef<UserTableData, any>>>(
+  const columns = useMemo<Array<ColumnDef<IUser, any>>>(
     () => [
       {
         accessorKey: 'name',

@@ -112,7 +112,10 @@ export function UsersTable({
         accessorKey: 'location',
         cell: (info) => {
           return (
-            info.getValue()?.name || (
+            info.getValue()?.name ?
+            
+            <span className="font-medium">{info.getValue().name}</span> :
+            (
               <span className="text-muted-foreground/50">—</span>
             )
           )

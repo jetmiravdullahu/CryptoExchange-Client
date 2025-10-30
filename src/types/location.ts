@@ -52,18 +52,6 @@ export type LocationFormData = {
   fee_value?: string
 }
 
-export type LocationTableData = {
-  id: string
-  code: string
-  name: string
-  address: string
-  city: string
-  is_active: boolean
-  user: {
-    id: string
-    name: string
-  }
-}
 
 export type ILocation = {
   id: string

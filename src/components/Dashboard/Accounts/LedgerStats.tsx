@@ -2,11 +2,7 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
   ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
@@ -21,7 +17,6 @@ import {
   Wallet,
   Zap,
 } from 'lucide-react'
-import { DashboardCard } from '@/components/DashboardCard'
 import { useGetAccountLedgerStats } from '@/hooks/api/AccountLedger/useGetAccountLedgerStats'
 import { Route } from '@/routes/_auth/dashboard/accounts/$accountId.ledger'
 import { MetricCard } from '@/components/MetricCard'
@@ -38,86 +33,6 @@ export const LedgerStats = () => {
   const { accountId } = Route.useParams()
 
   const { data: statisticsData } = useGetAccountLedgerStats(accountId)
-
-  const dashboardCards = [
-    {
-      title: 'Opening Balance',
-      value: statisticsData.opening_balance,
-      footer: '',
-      icon: '💰',
-    },
-    {
-      title: 'Closing Balance',
-      value: statisticsData.closing_balance,
-      footer: '',
-      icon: '💰',
-    },
-    {
-      title: 'Net Change',
-      value: statisticsData.net_change,
-      footer: '',
-      icon: '💰',
-    },
-    {
-      title: 'Total Credits',
-      value: statisticsData.totals.total_credits,
-      footer: '',
-      icon: '💰',
-    },
-    {
-      title: 'Total Debits',
-      value: statisticsData.totals.total_debits,
-      footer: '',
-      icon: '💰',
-    },
-  ]
-
-  const transactionTypeData = [
-    {
-      name: 'Manual Adjustments',
-      positive:
-        Number.parseFloat(statisticsData.by_type.manual_adjustments.net) || 0,
-      negative: 0,
-      actual:
-        Number.parseFloat(statisticsData.by_type.manual_adjustments.net) || 0,
-    },
-    {
-      name: 'Transfers',
-      positive: 0,
-      negative: Math.abs(
-        Number.parseFloat(statisticsData.by_type.transfers.net) || 0,
-      ),
-      actual: Number.parseFloat(statisticsData.by_type.transfers.net) || 0,
-    },
-    {
-      name: 'Transactions',
-      positive: Math.max(
-        Number.parseFloat(statisticsData.by_type.transactions.net) || 0,
-        0,
-      ),
-      negative: Math.abs(
-        Math.min(
-          Number.parseFloat(statisticsData.by_type.transactions.net) || 0,
-          0,
-        ),
-      ),
-      actual: Number.parseFloat(statisticsData.by_type.transactions.net) || 0,
-    },
-    {
-      name: 'Corrections',
-      positive: Math.max(
-        Number.parseFloat(statisticsData.by_type.corrections.net) || 0,
-        0,
-      ),
-      negative: Math.abs(
-        Math.min(
-          Number.parseFloat(statisticsData.by_type.corrections.net) || 0,
-          0,
-        ),
-      ),
-      actual: Number.parseFloat(statisticsData.by_type.corrections.net) || 0,
-    },
-  ]
 
   const dailyAverageData = [
     {

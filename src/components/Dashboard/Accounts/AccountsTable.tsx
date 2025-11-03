@@ -9,7 +9,9 @@ import {
   BanknoteArrowUp,
   ChevronDown,
   ChevronUp,
+  EyeIcon,
 } from 'lucide-react'
+import { useNavigate } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import type { Account, AccountTransactionInput } from '@/types/account'
 import {
@@ -34,6 +36,9 @@ export const AccountsTable = ({
     >,
   ) => void
 }) => {
+
+  const navigate = useNavigate()
+
   const columns = useMemo<Array<ColumnDef<Account, any>>>(
     () => [
       {
@@ -93,6 +98,17 @@ export const AccountsTable = ({
               }
             >
               <BanknoteArrowDown className="w-6! h-6!" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() =>
+                navigate({
+                  to: `/dashboard/accounts/${row.original.id}/ledger`,
+                })
+              }
+            >
+              <EyeIcon />
             </Button>
           </div>
         ),

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as SelectPrimitive from '@radix-ui/react-select'
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon, XIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -176,17 +176,19 @@ function SelectInput({
   placeholder,
   options,
   label,
+  id,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Root> & {
   placeholder?: string
   className?: string
   options: Array<{ label: string; value: string }>
   label: string
+  id?: string
 }) {
   return (
     <div>
       <Select {...props}>
-        <SelectTrigger className={cn('w-full', className)}>
+        <SelectTrigger id={id} className={cn('w-full relative', className)}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>

@@ -173,7 +173,6 @@ export const TransactionsTable = ({
                 <TableHead
                   key={header.id}
                   colSpan={header.colSpan}
-                  // className="px-4 py-3 text-left"
                 >
                   {header.isPlaceholder ? null : (
                     <>

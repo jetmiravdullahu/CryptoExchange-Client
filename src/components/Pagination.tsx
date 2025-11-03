@@ -24,8 +24,8 @@ export const Pagination = <T,>({ table }: { table: Table<T> }) => {
     table.setPageIndex(page)
   }
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-end gap-4 mt-4">
-      <div className="flex flex-col sm:flex-row gap-4">
+    <div className="flex flex-col sm:flex-row gap-4 mt-4">
+      <div className="flex flex-col justify-center items-center sm:flex-row gap-4 w-full">
         {/* Page size selector */}
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground whitespace-nowrap">
@@ -50,7 +50,7 @@ export const Pagination = <T,>({ table }: { table: Table<T> }) => {
           </Select>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex ml-auto items-center gap-2">
           <Button
             variant="outline"
             size="icon"

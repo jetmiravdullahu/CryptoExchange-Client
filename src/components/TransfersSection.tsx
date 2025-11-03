@@ -11,6 +11,7 @@ import {
 import { TransfersTable } from './Dashboard/Transfers/TransfersTable'
 import { TransferFormModal } from './Dashboard/Transfers/TransferFormModal'
 import { TransferDetailModal } from './TransferDetailModal'
+import TableFilters from './TableFilters'
 import type { ITransfer, TransferFormData } from '@/types/transfer'
 import { useGetTransfers } from '@/hooks/api/Transfer/useGetTransfers'
 import { useGetCurrentUser } from '@/hooks/api/Auth/useGetCurrentUser'
@@ -59,9 +60,10 @@ export const TransfersSection = () => {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>All Transfers</CardTitle>
-              <CardDescription>
+              <CardDescription className='mb-4'>
                 Manage transfer requests and statuses
               </CardDescription>
+              {user.user.role === 'SELLER' && <TableFilters options={{}} onSetFilters={() => {}} />}
             </div>
             <Button className="gap-2" onClick={onCreateTransfer}>
               <Plus className="h-4 w-4" />

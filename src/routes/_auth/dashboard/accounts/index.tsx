@@ -17,7 +17,7 @@ import {
 import { AccountsTable } from '@/components/Dashboard/Accounts/AccountsTable'
 import { AccountTransactionModal } from '@/components/Dashboard/Accounts/AccountTransactionModal'
 
-export const Route = createFileRoute('/_auth/dashboard/accounts')({
+export const Route = createFileRoute('/_auth/dashboard/accounts/')({
   component: RouteComponent,
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData(getAccountsQuery)

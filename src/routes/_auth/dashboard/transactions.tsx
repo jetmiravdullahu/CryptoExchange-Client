@@ -13,6 +13,7 @@ import {
 } from '@/hooks/api/Transaction/useGetTransactions'
 import { PostErrorComponent } from '@/components/PostErrorComponent'
 import { LoadingSpinner } from '@/components/LoadingComponent'
+import TableFilters from '@/components/TableFilters'
 
 export const Route = createFileRoute('/_auth/dashboard/transactions')({
   component: RouteComponent,
@@ -42,14 +43,16 @@ function RouteComponent() {
           Create, edit, and manage transactions
         </p>
       </div>
+
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>All Transactions</CardTitle>
-              <CardDescription>
+              <CardDescription className='mb-4'>
                 Manage transactions and permissions
               </CardDescription>
+                <TableFilters options={{}} onSetFilters={() => {}} />
             </div>
           </div>
         </CardHeader>

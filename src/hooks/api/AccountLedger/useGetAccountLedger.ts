@@ -1,5 +1,6 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import dayjs from 'dayjs'
 import type { PaginationState, SortingState } from '@tanstack/react-table'
 import { getAccountLedger } from '@/api/AccountLedger/getAccountLedger'
 
@@ -24,7 +25,7 @@ export const getAccountLedgerQuery = (
       opts || {
         pagination: initialPagination,
         sorting: initialSorting,
-        filters: {}
+        filters: initialFilters,
       },
     ],
     queryFn: () =>
@@ -38,6 +39,7 @@ export const getAccountLedgerQuery = (
               id,
               pagination: initialPagination,
               sorting: initialSorting,
+              filters: initialFilters,
             },
       ),
   })
@@ -54,11 +56,16 @@ const initialSorting: SortingState = [
   },
 ]
 
+const initialFilters = {
+  from: dayjs().startOf('month').format('YYYY-MM-DD'),
+  to: dayjs().format('YYYY-MM-DD'),
+}
+
 export function useGetAccountLedger(id: string) {
   const [pagination, setPagination] =
     useState<PaginationState>(initialPagination)
   const [sorting, setSorting] = useState<SortingState>(initialSorting)
-  const [filters, setFilters] = useState<FilterState>({})
+  const [filters, setFilters] = useState<FilterState>(initialFilters)
 
   const onSetFilters = (key: keyof typeof filters, value?: string) => {
     console.log({ key, value })

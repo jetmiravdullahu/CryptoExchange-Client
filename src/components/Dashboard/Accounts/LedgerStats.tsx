@@ -318,50 +318,54 @@ export const LedgerStats = () => {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Largest Credit */}
-        <Card className="bg-gradient-to-br from-green-900/30 to-slate-900 border-slate-700">
-          <CardHeader>
-            <CardDescription className="text-slate-400">
-              Largest Credit
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <p className="text-2xl font-bold text-green-400">
-              +{statisticsData.largest_entries.largest_credit.amount}
-            </p>
-            <p className="text-sm text-slate-400">
-              {statisticsData.largest_entries.largest_credit.reference_type}
-            </p>
-            <p className="text-xs text-slate-500">
-              {statisticsData.largest_entries.largest_credit.date}
-            </p>
-            <p className="text-xs italic text-slate-400">
-              {statisticsData.largest_entries.largest_credit.description}
-            </p>
-          </CardContent>
-        </Card>
+        {statisticsData.largest_entries.largest_credit && (
+          <Card className="bg-gradient-to-br from-green-900/30 to-slate-900 border-slate-700">
+            <CardHeader>
+              <CardDescription className="text-slate-400">
+                Largest Credit
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <p className="text-2xl font-bold text-green-400">
+                +{statisticsData.largest_entries.largest_credit.amount}
+              </p>
+              <p className="text-sm text-slate-400">
+                {statisticsData.largest_entries.largest_credit.reference_type}
+              </p>
+              <p className="text-xs text-slate-500">
+                {statisticsData.largest_entries.largest_credit.date}
+              </p>
+              <p className="text-xs italic text-slate-400">
+                {statisticsData.largest_entries.largest_credit.description}
+              </p>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Largest Debit */}
-        <Card className="bg-gradient-to-br from-red-900/30 to-slate-900 border-slate-700">
-          <CardHeader>
-            <CardDescription className="text-slate-400">
-              Largest Debit
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <p className="text-2xl font-bold text-red-400">
-              -{statisticsData.largest_entries.largest_debit.amount}
-            </p>
-            <p className="text-sm text-slate-400">
-              {statisticsData.largest_entries.largest_debit.reference_type}
-            </p>
-            <p className="text-xs text-slate-500">
-              {statisticsData.largest_entries.largest_debit.date}
-            </p>
-            <p className="text-xs italic text-slate-400">
-              {statisticsData.largest_entries.largest_debit.description}
-            </p>
-          </CardContent>
-        </Card>
+        {statisticsData.largest_entries.largest_debit && (
+          <Card className="bg-gradient-to-br from-red-900/30 to-slate-900 border-slate-700">
+            <CardHeader>
+              <CardDescription className="text-slate-400">
+                Largest Debit
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <p className="text-2xl font-bold text-red-400">
+                -{statisticsData.largest_entries.largest_debit.amount}
+              </p>
+              <p className="text-sm text-slate-400">
+                {statisticsData.largest_entries.largest_debit.reference_type}
+              </p>
+              <p className="text-xs text-slate-500">
+                {statisticsData.largest_entries.largest_debit.date}
+              </p>
+              <p className="text-xs italic text-slate-400">
+                {statisticsData.largest_entries.largest_debit.description}
+              </p>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   )

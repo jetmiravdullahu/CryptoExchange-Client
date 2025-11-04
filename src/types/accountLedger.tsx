@@ -96,12 +96,12 @@ export interface IAccountLedgerStats {
             date: string;
             reference_type: ReferenceType;
             description: string;
-        };
+        } | null;
         largest_debit: {
             amount: string;
             date: string;
             reference_type: ReferenceType;
             description: string;
-        };
+        } | null;
     };
 }

@@ -67,7 +67,7 @@ function RouteComponent() {
   } = useGetAccountLedger(accountId)
   const { data: ledgerStatsData } = useGetAccountLedgerStats(accountId)
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">

@@ -1,4 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { Plus } from 'lucide-react'
+import { useState } from 'react'
 import { TransactionsTable } from '@/components/Dashboard/Transactions/TransactionsTable'
 import {
   Card,
@@ -14,17 +16,24 @@ import {
 import { PostErrorComponent } from '@/components/PostErrorComponent'
 import { LoadingSpinner } from '@/components/LoadingComponent'
 import TableFilters from '@/components/TableFilters'
+import { Button } from '@/components/ui/button'
+import { TransactionFormDialog } from '@/components/Dashboard/Transactions/TransactionFormModal'
+import { getLocationOptionsQuery } from '@/hooks/api/Location/useGetLocationOptionsQuery'
+import { getAssetOptionsQuery } from '@/hooks/api/Asset/useGetAssetOptionsQuery'
 
 export const Route = createFileRoute('/_auth/dashboard/transactions')({
   component: RouteComponent,
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData(getTransactionsQuery())
+    context.queryClient.prefetchQuery(getLocationOptionsQuery)
+    context.queryClient.prefetchQuery(getAssetOptionsQuery)
   },
   errorComponent: PostErrorComponent,
   pendingComponent: LoadingSpinner,
 })
 
 function RouteComponent() {
+
   const {
     data: transactionsData,
     pagination,
@@ -32,6 +41,8 @@ function RouteComponent() {
     setSorting,
     sorting,
   } = useGetTransactions()
+
+  const [open, setOpen] = useState(false)
 
   return (
     <div className="space-y-6">
@@ -49,12 +60,16 @@ function RouteComponent() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>All Transactions</CardTitle>
-              <CardDescription className='mb-4'>
+              <CardDescription className="mb-4">
                 Manage transactions and permissions
               </CardDescription>
-                <TableFilters options={{}} onSetFilters={() => {}} />
             </div>
+            <Button className="gap-2" onClick={() => setOpen(true)}>
+              <Plus className="h-4 w-4" />
+              Create Transaction
+            </Button>
           </div>
+          <TableFilters options={{}} onSetFilters={() => {}} />
         </CardHeader>
         <CardContent>
           <div className="rounded-md border px-4">
@@ -69,6 +84,7 @@ function RouteComponent() {
           </div>
         </CardContent>
       </Card>
+      {open && <TransactionFormDialog open={open} onOpenChange={setOpen} />}
     </div>
   )
 }

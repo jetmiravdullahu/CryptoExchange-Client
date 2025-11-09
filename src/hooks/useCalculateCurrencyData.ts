@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 import { getCurrentExchangeRateQuery } from './api/ExchangeRate/useGetCurrentExchangeRate'
@@ -17,6 +17,8 @@ export interface UseExchangeCalculatorConfig {
   initialAssetFrom: Asset
   initialAssetTo: Asset
   initialExchangeRate: number
+  initialFeeType: FeeType
+  initialFeeValue: string
 }
 
 export interface UseExchangeCalculatorReturn {
@@ -58,13 +60,18 @@ export const useExchangeCalculator = (
   const [amountTo, setAmountToState] = useState<string>('0')
 
   // Fee configuration
-  const [feeType, setFeeTypeState] = useState<FeeType>('PCT')
-  const [feeValue, setFeeValueState] = useState<string>('10')
+  const [feeType, setFeeTypeState] = useState<FeeType>(config.initialFeeType)
+  const [feeValue, setFeeValueState] = useState<string>(config.initialFeeValue)
 
   // Exchange rate (constant for now)
   const [exchangeRate, setExchangeRate] = useState<number>(
     config.initialExchangeRate,
   )
+
+  useEffect(() => {
+    setFeeTypeState(config.initialFeeType)
+    setFeeValueState(config.initialFeeValue)
+  }, [config.initialFeeType, config.initialFeeValue])
 
   // Calculated results
   const [calculatedFee, setCalculatedFee] = useState<number>(0)

@@ -12,14 +12,9 @@ export const getCurrentLocationFeeQuery = (location_id?: string) =>
   })
 
 export const useGetCurrentLocationFee = (location_id?: string) => {
-  return useQuery(
-    getCurrentLocationFeeQuery(location_id),
-  )
+  return useQuery(getCurrentLocationFeeQuery(location_id))
 }
 
 export const useGetCurrentLocationFeeSuspenseQuery = (location_id?: string) => {
-  return useSuspenseQuery(
-    getCurrentLocationFeeQuery(location_id),
-  )
+  return useSuspenseQuery(getCurrentLocationFeeQuery(location_id))
 }
-

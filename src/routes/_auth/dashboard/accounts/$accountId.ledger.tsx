@@ -10,7 +10,6 @@ import {
 } from '@/hooks/api/AccountLedger/useGetAccountLedger'
 import {
   getAccountLedgerStatsQuery,
-  useGetAccountLedgerStats,
 } from '@/hooks/api/AccountLedger/useGetAccountLedgerStats'
 import { AccountLedgersTable } from '@/components/Dashboard/AccountLedgers/AccountLedgersTable'
 import {
@@ -64,8 +63,8 @@ function RouteComponent() {
     sorting,
     filters,
     onSetFilters,
+    statsData
   } = useGetAccountLedger(accountId)
-  const { data: ledgerStatsData } = useGetAccountLedgerStats(accountId)
 
   const [open, setOpen] = useState(true)
 
@@ -78,8 +77,8 @@ function RouteComponent() {
             Account Ledger
           </h1>
           <p className="text-sm text-muted-foreground">
-            {ledgerStatsData.account.owner_type} -{' '}
-            {ledgerStatsData.account.asset_name}
+            {statsData.account.owner_type} -{' '}
+            {statsData.account.asset_name}
           </p>
         </div>
 
@@ -100,7 +99,7 @@ function RouteComponent() {
             </Button>
           </CollapsibleTrigger>
           <CollapsibleContent>
-            <LedgerStats />
+            <LedgerStats statsData={statsData} />
           </CollapsibleContent>
         </Collapsible>
 

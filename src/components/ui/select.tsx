@@ -1,7 +1,8 @@
 import * as React from 'react'
 import * as SelectPrimitive from '@radix-ui/react-select'
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon, X } from 'lucide-react'
 
+import { Label } from './label'
 import { cn } from '@/lib/utils'
 
 function Select({
@@ -26,9 +27,11 @@ function SelectTrigger({
   className,
   size = 'default',
   children,
+  clearable = false,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
   size?: 'sm' | 'default'
+  clearable?: boolean
 }) {
   return (
     <SelectPrimitive.Trigger
@@ -40,7 +43,9 @@ function SelectTrigger({
       )}
       {...props}
     >
-      {children}
+      <div className={cn(clearable && 'max-w-4/5 truncate pr-2')}>
+        {children}
+      </div>
       <SelectPrimitive.Icon asChild>
         <ChevronDownIcon className="size-4 opacity-50" />
       </SelectPrimitive.Icon>
@@ -171,26 +176,61 @@ function SelectScrollDownButton({
   )
 }
 
+type SelectOption = { label: string; value: string }
+
+type CommonSelectInputProps = React.ComponentProps<
+  typeof SelectPrimitive.Root
+> & {
+  placeholder?: string
+  className?: string
+  options: Array<SelectOption>
+  label: string
+  id?: string
+  inputLabel?: string
+}
+
+type ClearableEither =
+  | { clearable?: false; onClear?: never }
+  | { clearable: true; onClear: () => void }
+
+type SelectInputProps = CommonSelectInputProps & ClearableEither
+
 function SelectInput({
   className,
   placeholder,
   options,
   label,
+  inputLabel,
   id,
+  clearable,
+  onClear,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Root> & {
-  placeholder?: string
-  className?: string
-  options: Array<{ label: string; value: string }>
-  label: string
-  id?: string
-}) {
+}: SelectInputProps) {
   return (
     <div>
-      <Select {...props}>
-        <SelectTrigger id={id} className={cn('w-full relative', className)}>
-          <SelectValue placeholder={placeholder} />
-        </SelectTrigger>
+      {inputLabel && (
+        <Label htmlFor={inputLabel} className="mb-2 text-md font-bold">
+          {inputLabel}
+        </Label>
+      )}
+      <Select {...props} value={props.value ?? ''}>
+        <div className="relative">
+          <SelectTrigger
+            clearable={clearable}
+            id={id}
+            className={cn('w-full relative', className)}
+          >
+            <SelectValue placeholder={placeholder} />
+          </SelectTrigger>
+          {props.value && clearable && (
+            <div
+              onClick={onClear}
+              className="absolute top-1/2 right-8 cursor-pointer -translate-y-1/2"
+            >
+              <X size={16} />
+            </div>
+          )}
+        </div>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>{label}</SelectLabel>

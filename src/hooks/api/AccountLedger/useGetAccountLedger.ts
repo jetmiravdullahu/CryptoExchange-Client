@@ -1,6 +1,7 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import dayjs from 'dayjs'
+import { getAccountLedgerStatsQuery } from './useGetAccountLedgerStats'
 import type { PaginationState, SortingState } from '@tanstack/react-table'
 import { getAccountLedger } from '@/api/AccountLedger/getAccountLedger'
 
@@ -82,8 +83,11 @@ export function useGetAccountLedger(id: string) {
     }),
   )
 
+  const { data: statsData } = useSuspenseQuery(getAccountLedgerStatsQuery(id, filters))
+
   return {
     data,
+    statsData,
     pagination,
     sorting,
     setPagination,

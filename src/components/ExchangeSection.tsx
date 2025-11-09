@@ -30,7 +30,9 @@ export const ExchangeSection = () => {
 
   const { data: currentExchangeRate } = useGetCurrentExchangeRateSuspenseQuery({
     from_asset_id: assetOptions[0].value,
-    to_asset_id: assetOptions[1].value,
+    to_asset_id: assetOptions.find(
+      (asset) => asset.class !== assetOptions[0].class,
+    )!.value,
   })
 
   const {
@@ -53,8 +55,12 @@ export const ExchangeSection = () => {
     calculatedFee,
   } = useExchangeCalculator({
     initialAssetFrom: assetOptions[0],
-    initialAssetTo: assetOptions[1],
+    initialAssetTo: assetOptions.find(
+      (asset) => asset.class !== assetOptions[0].class,
+    )!,
     initialExchangeRate: parseFloat(currentExchangeRate.rate),
+    initialFeeType: currentLocationFee.fee_type,
+    initialFeeValue: currentLocationFee.fee_value.toString(),
   })
 
   const handleReviewTrade = () => {
@@ -83,7 +89,7 @@ export const ExchangeSection = () => {
           )
 
           queryClient.invalidateQueries({
-            queryKey: getTransactionsQuery().queryKey
+            queryKey: getTransactionsQuery().queryKey,
           })
 
           navigate({
@@ -101,8 +107,8 @@ export const ExchangeSection = () => {
           <CardTitle>Convert Currency</CardTitle>
           {!!exchangeRate && (
             <CardDescription>
-              Exchange rate: 1 {assetFrom.label} ={' '}
-              {Number(exchangeRate).toFixed(2)} {assetTo.label}
+              Exchange rate: 1 {assetFrom.label} = {exchangeRate}{' '}
+              {assetTo.label}
             </CardDescription>
           )}
         </CardHeader>

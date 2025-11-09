@@ -17,8 +17,7 @@ import {
   Wallet,
   Zap,
 } from 'lucide-react'
-import { useGetAccountLedgerStats } from '@/hooks/api/AccountLedger/useGetAccountLedgerStats'
-import { Route } from '@/routes/_auth/dashboard/accounts/$accountId.ledger'
+import type { IAccountLedgerStats } from '@/types/accountLedger'
 import { MetricCard } from '@/components/MetricCard'
 import {
   Card,
@@ -29,36 +28,35 @@ import {
 } from '@/components/ui/card'
 import { ChartContainer, ChartTooltip } from '@/components/ui/chart'
 
-export const LedgerStats = () => {
-  const { accountId } = Route.useParams()
-
-  const { data: statisticsData } = useGetAccountLedgerStats(accountId)
+export const LedgerStats = ({
+  statsData
+}: {
+  statsData: IAccountLedgerStats
+}) => {
 
   const dailyAverageData = [
     {
       name: 'Credits/Day',
-      value:
-        Number.parseFloat(statisticsData.daily_averages.credits_per_day) || 0,
+      value: Number.parseFloat(statsData.daily_averages.credits_per_day) || 0,
     },
     {
       name: 'Debits/Day',
-      value:
-        Number.parseFloat(statisticsData.daily_averages.debits_per_day) || 0,
+      value: Number.parseFloat(statsData.daily_averages.debits_per_day) || 0,
     },
   ]
 
   const balanceHistoryData = [
     {
       date: 'Opening',
-      balance: Number.parseFloat(statisticsData.opening_balance) || 0,
+      balance: Number.parseFloat(statsData.opening_balance) || 0,
     },
     {
       date: 'Closing',
-      balance: Number.parseFloat(statisticsData.closing_balance) || 0,
+      balance: Number.parseFloat(statsData.closing_balance) || 0,
     },
   ]
 
-  const isPositive = Number.parseFloat(statisticsData.net_change) >= 0
+  const isPositive = Number.parseFloat(statsData.net_change) >= 0
 
   const walletIcon = <Wallet className="w-6 h-6 text-blue-400" />
   const trendIcon = isPositive ? (
@@ -70,14 +68,14 @@ export const LedgerStats = () => {
   const outgoingIcon = <ArrowUpRight className="w-6 h-6 text-purple-400" />
 
   const netChangePercentage =
-    Number.parseFloat(statisticsData.net_change_percentage) || 0
+    Number.parseFloat(statsData.net_change_percentage) || 0
 
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <MetricCard
           title="Current Balance"
-          value={`${statisticsData.account.current_balance} ${statisticsData.account.asset_name}`}
+          value={`${statsData.account.current_balance} ${statsData.account.asset_name}`}
           icon={walletIcon}
           gradient="from-blue-900 to-slate-900"
           valueColor="text-blue-400"
@@ -85,7 +83,7 @@ export const LedgerStats = () => {
 
         <MetricCard
           title="Net Change"
-          value={`${isPositive ? '+' : ''}${statisticsData.net_change}`}
+          value={`${isPositive ? '+' : ''}${statsData.net_change}`}
           description={`${netChangePercentage}%`}
           icon={trendIcon}
           gradient={
@@ -98,8 +96,8 @@ export const LedgerStats = () => {
 
         <MetricCard
           title="Total Credits"
-          value={statisticsData.totals.total_credits}
-          description={`${statisticsData.totals.entry_count} entries`}
+          value={statsData.totals.total_credits}
+          description={`${statsData.totals.entry_count} entries`}
           icon={incomingIcon}
           gradient="from-emerald-900 to-slate-900"
           valueColor="text-emerald-400"
@@ -107,7 +105,7 @@ export const LedgerStats = () => {
 
         <MetricCard
           title="Total Debits"
-          value={statisticsData.totals.total_debits}
+          value={statsData.totals.total_debits}
           description="Outgoing"
           icon={outgoingIcon}
           gradient="from-violet-900 to-slate-900"
@@ -138,7 +136,7 @@ export const LedgerStats = () => {
                         return (
                           <div className="bg-slate-900 border border-slate-700 rounded p-2">
                             <p className="text-sm text-white">
-                              {statisticsData.account.asset_name}{' '}
+                              {statsData.account.asset_name}{' '}
                               {Number(payload[0]?.value).toFixed(2)}
                             </p>
                           </div>
@@ -181,7 +179,7 @@ export const LedgerStats = () => {
                         return (
                           <div className="bg-slate-900 border border-slate-700 rounded p-2">
                             <p className="text-sm text-white">
-                              {statisticsData.account.asset_name}{' '}
+                              {statsData.account.asset_name}{' '}
                               {Number(payload[0]?.value).toFixed(2)}
                             </p>
                           </div>
@@ -202,48 +200,54 @@ export const LedgerStats = () => {
           {
             name: 'Manual Adjustments',
             net:
-              Number.parseFloat(
-                statisticsData.by_type.manual_adjustments.net,
-              ) || 0,
-            description: `Credits: ${statisticsData.by_type.manual_adjustments.credits}`,
+              Number.parseFloat(statsData.by_type.manual_adjustments.net) || 0,
+            description: `Credits: ${statsData.by_type.manual_adjustments.credits}`,
             icon: <SmilePlus className="w-6 h-6 text-amber-400" />,
           },
           {
             name: 'Transfers',
-            net: Number.parseFloat(statisticsData.by_type.transfers.net) || 0,
-            description: `Out: ${statisticsData.by_type.transfers.transfers_out.amount}`,
+            net: Number.parseFloat(statsData.by_type.transfers.net) || 0,
+            description: `Out: ${statsData.by_type.transfers.transfers_out.amount}`,
             icon: <Send className="w-6 h-6 text-orange-400" />,
           },
           {
             name: 'Transactions',
-            net:
-              Number.parseFloat(statisticsData.by_type.transactions.net) || 0,
-            description: `Count: ${statisticsData.by_type.transactions.count}`,
+            net: Number.parseFloat(statsData.by_type.transactions.net) || 0,
+            // description: `Count: ${statsData.by_type.transactions.count}`,
+            description: (
+              <div>
+                <div>Count: {statsData.by_type.transactions.count}</div>
+                <div>
+                  Fees Collected:{' '}
+                  {statsData.by_type.transactions.fees_collected}
+                </div>
+              </div>
+            ),
             icon: <Zap className="w-6 h-6 text-cyan-400" />,
           },
           {
             name: 'Corrections',
-            net: Number.parseFloat(statisticsData.by_type.corrections.net) || 0,
-            description: `Count: ${statisticsData.by_type.corrections.count}`,
+            net: Number.parseFloat(statsData.by_type.corrections.net) || 0,
+            description: `Count: ${statsData.by_type.corrections.count}`,
             icon: <CheckCircle2 className="w-6 h-6 text-teal-400" />,
           },
         ].map((type) => (
           <Card key={type.name} className=" border-slate-700">
             <CardHeader>
-              <CardDescription className="text-slate-400">
+              <CardDescription className="text-slate-400 flex justify-between items-center">
                 {type.name}
+                <p
+                  className={`text-2xl font-bold ${type.net >= 0 ? 'text-green-400' : 'text-red-400'}`}
+                >
+                  {type.net >= 0 ? '+' : ''}
+                  {type.net.toFixed(2)}
+                </p>
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-3">
                 {type.icon}
                 <div>
-                  <p
-                    className={`text-2xl font-bold ${type.net >= 0 ? 'text-green-400' : 'text-red-400'}`}
-                  >
-                    {type.net >= 0 ? '+' : ''}
-                    {type.net.toFixed(2)}
-                  </p>
                   <p className="text-xs text-slate-400">{type.description}</p>
                 </div>
               </div>
@@ -252,73 +256,9 @@ export const LedgerStats = () => {
         ))}
       </div>
 
-      {/* Transaction Details */}
-      <div className="mb-8">
-        <Card className="border-slate-700">
-          <CardHeader>
-            <CardTitle className="text-white">Transaction Summary</CardTitle>
-            <CardDescription>Breakdown by type</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {/* Transfers */}
-              <div className="flex justify-between items-start pb-4 border-b border-slate-700">
-                <div>
-                  <p className="font-semibold text-white">Transfers</p>
-                  <p className="text-sm text-slate-400">
-                    Out: {statisticsData.by_type.transfers.transfers_out.amount}
-                  </p>
-                </div>
-                <p className="text-lg font-bold text-red-400">
-                  {statisticsData.by_type.transfers.net}
-                </p>
-              </div>
-
-              {/* Manual Adjustments */}
-              <div className="flex justify-between items-start pb-4 border-b border-slate-700">
-                <div>
-                  <p className="font-semibold text-white">Manual Adjustments</p>
-                  <p className="text-sm text-slate-400">
-                    Credits: {statisticsData.by_type.manual_adjustments.credits}
-                  </p>
-                </div>
-                <p className="text-lg font-bold text-green-400">
-                  +{statisticsData.by_type.manual_adjustments.net}
-                </p>
-              </div>
-
-              {/* Transactions */}
-              <div className="flex justify-between items-start pb-4 border-b border-slate-700">
-                <div>
-                  <p className="font-semibold text-white">Transactions</p>
-                  <p className="text-sm text-slate-400">
-                    Count: {statisticsData.by_type.transactions.count}
-                  </p>
-                </div>
-                <p className="text-lg font-bold text-slate-400">
-                  {statisticsData.by_type.transactions.net}
-                </p>
-              </div>
-
-              {/* Corrections */}
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="font-semibold text-white">Corrections</p>
-                  <p className="text-sm text-slate-400">
-                    Count: {statisticsData.by_type.corrections.count}
-                  </p>
-                </div>
-                <p className="text-lg font-bold text-slate-400">
-                  {statisticsData.by_type.corrections.net}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Largest Credit */}
-        {statisticsData.largest_entries.largest_credit && (
+        {statsData.largest_entries.largest_credit && (
           <Card className="bg-gradient-to-br from-green-900/30 to-slate-900 border-slate-700">
             <CardHeader>
               <CardDescription className="text-slate-400">
@@ -327,23 +267,23 @@ export const LedgerStats = () => {
             </CardHeader>
             <CardContent className="space-y-2">
               <p className="text-2xl font-bold text-green-400">
-                +{statisticsData.largest_entries.largest_credit.amount}
+                +{statsData.largest_entries.largest_credit.amount}
               </p>
               <p className="text-sm text-slate-400">
-                {statisticsData.largest_entries.largest_credit.reference_type}
+                {statsData.largest_entries.largest_credit.reference_type}
               </p>
               <p className="text-xs text-slate-500">
-                {statisticsData.largest_entries.largest_credit.date}
+                {statsData.largest_entries.largest_credit.date}
               </p>
               <p className="text-xs italic text-slate-400">
-                {statisticsData.largest_entries.largest_credit.description}
+                {statsData.largest_entries.largest_credit.description}
               </p>
             </CardContent>
           </Card>
         )}
 
         {/* Largest Debit */}
-        {statisticsData.largest_entries.largest_debit && (
+        {statsData.largest_entries.largest_debit && (
           <Card className="bg-gradient-to-br from-red-900/30 to-slate-900 border-slate-700">
             <CardHeader>
               <CardDescription className="text-slate-400">
@@ -352,16 +292,16 @@ export const LedgerStats = () => {
             </CardHeader>
             <CardContent className="space-y-2">
               <p className="text-2xl font-bold text-red-400">
-                -{statisticsData.largest_entries.largest_debit.amount}
+                -{statsData.largest_entries.largest_debit.amount}
               </p>
               <p className="text-sm text-slate-400">
-                {statisticsData.largest_entries.largest_debit.reference_type}
+                {statsData.largest_entries.largest_debit.reference_type}
               </p>
               <p className="text-xs text-slate-500">
-                {statisticsData.largest_entries.largest_debit.date}
+                {statsData.largest_entries.largest_debit.date}
               </p>
               <p className="text-xs italic text-slate-400">
-                {statisticsData.largest_entries.largest_debit.description}
+                {statsData.largest_entries.largest_debit.description}
               </p>
             </CardContent>
           </Card>

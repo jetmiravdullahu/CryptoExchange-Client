@@ -6,13 +6,7 @@ import {
   ChevronsRight,
 } from 'lucide-react'
 import { Button } from './ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select'
+import { SelectInput } from './ui/select'
 import { Input } from './ui/input'
 import type { Table } from '@tanstack/react-table'
 
@@ -26,28 +20,43 @@ export const Pagination = <T,>({ table }: { table: Table<T> }) => {
   return (
     <div className="flex flex-col sm:flex-row gap-4 mt-4">
       <div className="flex flex-col justify-center items-center sm:flex-row gap-4 w-full">
-        {/* Page size selector */}
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground whitespace-nowrap">
             Rows per page:
           </span>
-          <Select
+          <SelectInput
+            label="Sizes"
+            options={[
+              {
+                label: '10',
+                value: '10',
+              },
+              {
+                label: '15',
+                value: '15',
+              },
+              {
+                label: '20',
+                value: '20',
+              },
+              {
+                label: '30',
+                value: '30',
+              },
+              {
+                label: '40',
+                value: '40',
+              },
+              {
+                label: '50',
+                value: '50',
+              },
+            ]}
             value={table.getState().pagination.pageSize.toString()}
             onValueChange={(value) => {
               table.setPageSize(Number(value))
             }}
-          >
-            <SelectTrigger className="w-[70px] h-8">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {['10', '15', '20', '30', '40', '50'].map((pageSize) => (
-                <SelectItem key={pageSize} value={pageSize}>
-                  {pageSize}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          />
         </div>
 
         <div className="flex ml-auto items-center gap-2">

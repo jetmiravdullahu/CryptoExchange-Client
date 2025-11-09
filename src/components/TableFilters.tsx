@@ -137,6 +137,8 @@ export default function TableFilters({
           ]}
           placeholder="Type"
           value={options.type}
+          clearable
+          onClear={() => onSetFilters('type')}
         />
       </div>
     </div>

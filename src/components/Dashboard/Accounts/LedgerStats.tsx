@@ -10,6 +10,7 @@ import {
   ArrowDownLeft,
   ArrowUpRight,
   CheckCircle2,
+  Coins,
   Send,
   SmilePlus,
   TrendingDown,
@@ -29,11 +30,10 @@ import {
 import { ChartContainer, ChartTooltip } from '@/components/ui/chart'
 
 export const LedgerStats = ({
-  statsData
+  statsData,
 }: {
   statsData: IAccountLedgerStats
 }) => {
-
   const dailyAverageData = [
     {
       name: 'Credits/Day',
@@ -66,16 +66,17 @@ export const LedgerStats = ({
   )
   const incomingIcon = <ArrowDownLeft className="w-6 h-6 text-green-400" />
   const outgoingIcon = <ArrowUpRight className="w-6 h-6 text-purple-400" />
+  const feesIcon = <Coins className="w-6 h-6 text-yellow-400" />
 
   const netChangePercentage =
     Number.parseFloat(statsData.net_change_percentage) || 0
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
         <MetricCard
           title="Current Balance"
-          value={`${statsData.account.current_balance} ${statsData.account.asset_name}`}
+          value={`${parseFloat(statsData.account.current_balance).toFixed(6)} ${statsData.account.asset_name}`}
           icon={walletIcon}
           gradient="from-blue-900 to-slate-900"
           valueColor="text-blue-400"
@@ -108,8 +109,16 @@ export const LedgerStats = ({
           value={statsData.totals.total_debits}
           description="Outgoing"
           icon={outgoingIcon}
-          gradient="from-violet-900 to-slate-900"
-          valueColor="text-violet-400"
+          gradient="from-purple-900 to-slate-900"
+          valueColor="text-purple-400"
+        />
+        <MetricCard
+          title="Fees Collected"
+          value={statsData.by_type.transactions.fees_collected}
+          description="Collected from transactions"
+          icon={feesIcon}
+          gradient="from-yellow-900 to-slate-900"
+          valueColor="text-yellow-400"
         />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">

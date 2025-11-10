@@ -18,7 +18,7 @@ export function MetricCard({
   valueColor = "text-white",
 }: MetricCardProps) {
   return (
-    <Card className={`bg-gradient-to-br ${gradient} border-slate-700`}>
+    <Card className={`bg-gradient-to-br ${gradient} border-slate-700 overflow-hidden`}>
       <CardHeader>
         <CardDescription className="text-slate-400">{title}</CardDescription>
       </CardHeader>

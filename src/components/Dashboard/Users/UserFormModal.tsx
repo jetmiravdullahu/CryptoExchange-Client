@@ -16,6 +16,8 @@ import {
 import { useAppForm } from '@/hooks/form'
 import { useCreateUserMutation } from '@/hooks/api/User/useCreateUser'
 import { useEditUserMutation } from '@/hooks/api/User/useEditUser'
+import { getUsersQuery } from '@/hooks/api/User/useGetUsers'
+import { getSellersQuery } from '@/hooks/api/User/useGetSellers'
 
 type UserFormDialogProps = {
   open: boolean
@@ -68,7 +70,8 @@ export function UserFormDialog({
 
       await mutateFn(value, {
         onSuccess() {
-          queryClient.invalidateQueries({ queryKey: ['getUsers'] })
+          queryClient.invalidateQueries({ queryKey: getUsersQuery().queryKey })
+          queryClient.invalidateQueries({ queryKey: getSellersQuery.queryKey })
           onOpenChange(null)
         },
         onError(error) {

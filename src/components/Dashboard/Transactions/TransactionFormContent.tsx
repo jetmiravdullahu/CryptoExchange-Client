@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { ArrowLeftRight, DollarSign, Eye, Percent, ShoppingCart } from 'lucide-react'
+import { ArrowLeftRight, DollarSign, Percent, ShoppingCart } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import {

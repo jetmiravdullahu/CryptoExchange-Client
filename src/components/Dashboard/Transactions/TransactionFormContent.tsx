@@ -72,7 +72,7 @@ export function TransactionFormContent({
     initialFeeValue: currentLocationFee.fee_value.toString(),
   })
 
-  const handleReviewTrade = async () => {
+  const handleReviewTrade = () => {
     if (!Number(amountFrom) || !Number(amountTo) || !exchangeRate) {
       toast.error('Please enter valid amounts to trade.')
       return

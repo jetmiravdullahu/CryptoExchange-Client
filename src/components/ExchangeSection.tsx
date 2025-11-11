@@ -79,7 +79,7 @@ export const ExchangeSection = () => {
         from_amount: parseFloat(amountFrom),
         to_amount:
           assetTo.class === 'FIAT'
-            ? parseFloat(amountTo) + parseFloat(feeValue)
+            ? parseFloat(amountTo) + calculatedFee
             : parseFloat(amountTo),
 
         location_id: currentLocationFee.location_id,

@@ -76,6 +76,7 @@ export function TransactionFormContent({
       toast.error('Please enter valid amounts to trade.')
       return
     }
+
     createTransaction(
       {
         exchange_rate_id: currentExchangeRate.id,
@@ -85,7 +86,7 @@ export function TransactionFormContent({
         from_asset_id: assetFrom.value,
         to_asset_id: assetTo.value,
         from_amount: parseFloat(amountFrom),
-        to_amount: assetTo.class === 'FIAT' ? parseFloat(amountTo) + parseFloat(feeValue) : parseFloat(amountTo),
+        to_amount: assetTo.class === 'FIAT' ? parseFloat(amountTo) + calculatedFee : parseFloat(amountTo),
         location_id: location,
         rate_value: exchangeRate,
       },

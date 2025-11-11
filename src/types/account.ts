@@ -10,10 +10,10 @@ export const AccountSchema = (max_amount?: string) =>
       .string()
       .trim()
       .refine((v) => parseFloat(v) > 0, 'Amount is required')
-      .refine(
-        (v) => (max_amount ? parseFloat(v) < parseFloat(max_amount) : true),
-        'Amount cannot exceed maximum limit',
-      )
+      .refine((v) => {
+        console.log({ v, max_amount })
+        return max_amount ? parseFloat(v) <= parseFloat(max_amount) : true
+      }, 'Amount cannot exceed maximum limit')
       .refine((v) => /^\d+(\.\d+)?$/.test(v), 'Amount must be a valid number')
       .refine((v) => Number(v) >= 0.001, 'Amount must be at least 0.001'),
     description: z.string().trim().min(1, 'Description is required'),

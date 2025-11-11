@@ -61,12 +61,12 @@ export const AccountsTable = ({
 
       {
         accessorKey: 'balance',
-        cell: (info) => parseFloat(info.getValue()).toFixed(2),
+        cell: (info) => parseFloat(info.getValue()),
         header: () => <span>Balance</span>,
       },
       {
         accessorKey: 'reserved_balance',
-        cell: (info) => parseFloat(info.getValue()).toFixed(2),
+        cell: (info) => parseFloat(info.getValue()),
         header: () => <span>Reserved Balance</span>,
       },
       {

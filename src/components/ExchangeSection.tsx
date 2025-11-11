@@ -13,6 +13,7 @@ import {
 import { CurrencyConverter } from './CurrencyConverter'
 import { Button } from './ui/button'
 import { LocationFeeConfiguration } from './LocationFeeConfiguration'
+import { Badge } from './ui/badge'
 import { useGetAssetOptions } from '@/hooks/api/Asset/useGetAssetOptionsQuery'
 import { useCreateTransactionMutation } from '@/hooks/api/Transaction/useCreateTransaction'
 import { useExchangeCalculator } from '@/hooks/useCalculateCurrencyData'
@@ -108,7 +109,15 @@ export const ExchangeSection = () => {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-5">
       <Card className="lg:col-span-2 relative">
         <CardHeader>
-          <CardTitle>Convert Currency</CardTitle>
+          <CardTitle className="flex justify-between items-center">
+            <div>Convert Currency</div>
+            <Badge
+              className="h-10 px-6 text-md"
+              variant={assetTo.class === 'FIAT' ? 'confirm' : 'destructive'}
+            >
+              {assetTo.class === 'FIAT' ? 'Buying' : 'Selling'}
+            </Badge>
+          </CardTitle>
           {!!exchangeRate && (
             <CardDescription>
               Exchange rate: 1 {assetFrom.label} = {exchangeRate}{' '}
@@ -155,7 +164,7 @@ export const ExchangeSection = () => {
             className="h-12 w-full text-base gap-2"
             size="lg"
             onClick={handleReviewTrade}
-            disabled={!amountFrom || !amountTo || !exchangeRate}
+            disabled={!Number(amountFrom) || !Number(amountTo) || !exchangeRate}
           >
             {exchangeRate ? (
               <>

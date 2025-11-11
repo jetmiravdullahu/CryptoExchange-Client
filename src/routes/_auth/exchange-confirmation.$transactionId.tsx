@@ -225,10 +225,15 @@ function RouteComponent() {
               <Button
                 size="lg"
                 disabled={expired}
+                variant={exchangeData.to_asset.asset_class === 'FIAT' ? "confirm" : "destructive"}
                 onClick={handleConfirm}
                 className="h-12"
               >
-                Confirm Trade
+                {
+                  exchangeData.to_asset.asset_class === 'FIAT'
+                    ? 'Confirm Buy'
+                    : 'Confirm Sell'
+                }
               </Button>
             </div>
           </CardContent>

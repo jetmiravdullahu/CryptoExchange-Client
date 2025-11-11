@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { ArrowLeftRight, DollarSign, Eye, Percent } from 'lucide-react'
+import { ArrowLeftRight, DollarSign, Eye, Percent, ShoppingCart } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import {
@@ -20,6 +20,7 @@ import { useGetCurrentExchangeRateSuspenseQuery } from '@/hooks/api/ExchangeRate
 import { useCreateTransactionMutation } from '@/hooks/api/Transaction/useCreateTransaction'
 import { getTransactionsQuery } from '@/hooks/api/Transaction/useGetTransactions'
 import { useGetCurrentLocationFeeSuspenseQuery } from '@/hooks/api/LocationFee/useGetCurrentLocationFee'
+import { Badge } from '@/components/ui/badge'
 
 type TransactionFormContentProps = {
   onOpenChange: (open: boolean) => void
@@ -86,7 +87,10 @@ export function TransactionFormContent({
         from_asset_id: assetFrom.value,
         to_asset_id: assetTo.value,
         from_amount: parseFloat(amountFrom),
-        to_amount: assetTo.class === 'FIAT' ? parseFloat(amountTo) + calculatedFee : parseFloat(amountTo),
+        to_amount:
+          assetTo.class === 'FIAT'
+            ? parseFloat(amountTo) + calculatedFee
+            : parseFloat(amountTo),
         location_id: location,
         rate_value: exchangeRate,
       },
@@ -105,8 +109,11 @@ export function TransactionFormContent({
     <>
       <DialogHeader>
         <DialogTitle>Create New Transaction</DialogTitle>
-        <DialogDescription>
-          Add a new Transaction to the system
+        <DialogDescription className="flex justify-between items-center">
+          <div>Add a new Transaction to the system</div>
+          <Badge className='h-8 px-4 text-md' variant={assetTo.class === 'FIAT' ? 'confirm' : 'destructive'}>
+            {assetTo.class === 'FIAT' ? 'Buying' : 'Selling'}
+          </Badge>
         </DialogDescription>
       </DialogHeader>
       <SelectInput
@@ -259,13 +266,18 @@ export function TransactionFormContent({
         <Button
           className="h-12 w-full text-base gap-2"
           size="lg"
+          variant={assetTo.class === 'FIAT' ? 'confirm' : "destructive"}
           onClick={handleReviewTrade}
           disabled={!Number(amountFrom) || !Number(amountTo) || !exchangeRate}
         >
           {exchangeRate ? (
             <>
-              <Eye className="h-4 w-4" />
-              Create Transaction
+              {assetTo.class === 'FIAT' ? (
+                <ShoppingCart className="h-4 w-4" />
+              ) : (
+                <DollarSign className="h-4 w-4" />
+              )}
+              {assetTo.class === 'FIAT' ? 'Buy' : 'Sell'}
             </>
           ) : (
             <>No exchange rate found</>

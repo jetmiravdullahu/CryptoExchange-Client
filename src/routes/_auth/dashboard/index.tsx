@@ -175,7 +175,7 @@ function RouteComponent() {
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-full">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">
           Dashboard Overview
@@ -192,15 +192,15 @@ function RouteComponent() {
         ))}
       </div>
 
-      <div className="grid gap-4 2xl:grid-cols-2">
-        <Card>
-          <CardHeader>
+      <div className="grid gap-4 2xl:grid-cols-2 max-w-full overflow-hidden">
+        <Card className='max-w-full overflow-hidden'>
+          <CardHeader className='max-w-full'>
             <CardTitle>Global Balances by Asset</CardTitle>
             <CardDescription>
               Total balance across all locations
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex justify-center">
+          <CardContent className="px-0 md:px-6 flex max-w-full justify-center">
             <BarChartWithCells
               data={dashboardData.global_balances.by_asset}
               config={{

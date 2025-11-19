@@ -28,9 +28,9 @@ export const BarChartWithCells = ({
   assetColors,
 }: BarChartWithCells) => {
   return (
-    <ChartContainer config={config} className={cn('h-[300px]', className)}>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data}>
+    <ChartContainer config={config} className={cn('h-[300px] max-w-full', className)}>
+      <ResponsiveContainer>
+        <BarChart className='max-w-full' data={data}>
           <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
           <XAxis dataKey={xAxisKey} />
           <YAxis />

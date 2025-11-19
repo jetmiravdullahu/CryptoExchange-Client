@@ -193,7 +193,7 @@ function RouteComponent() {
           isCollapsed ? 'lg:pl-16' : 'lg:pl-64',
         )}
       >
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 overflow-hidden">
           <Outlet />
         </div>
       </main>

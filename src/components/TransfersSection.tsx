@@ -57,18 +57,24 @@ export const TransfersSection = () => {
       </div>
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>All Transfers</CardTitle>
-              <CardDescription className='mb-4'>
-                Manage transfer requests and statuses
-              </CardDescription>
-              {user.user.role === 'SELLER' && <TableFilters options={{}} onSetFilters={() => {}} />}
+          <div className='max-w-full overflow-hidden'>
+            <div className="flex flex-col mb-4 md:flex-row md:items-center md:justify-between gap-4">
+              <div className='w-full'>
+                <CardTitle>
+                  <span>All Transfers</span>
+                </CardTitle>
+                <CardDescription className="mb-4">
+                  Manage transfer requests and statuses
+                </CardDescription>
+              </div>
+              <Button className="gap-2" onClick={onCreateTransfer}>
+                <Plus className="h-4 w-4" />
+                Create Transfer
+              </Button>
             </div>
-            <Button className="gap-2" onClick={onCreateTransfer}>
-              <Plus className="h-4 w-4" />
-              Create Transfer
-            </Button>
+            {user.user.role === 'SELLER' && (
+              <TableFilters options={{}} onSetFilters={() => {}} />
+            )}
           </div>
         </CardHeader>
         <CardContent>

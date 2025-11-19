@@ -25,7 +25,7 @@ export default function TableFilters({
   const formatDate = (d?: string) => (d ? dayjs(d).format('DD/MM/YYYY') : '')
 
   return (
-    <div className={cn('flex gap-4', className)}>
+    <div className={cn('flex gap-4 flex-wrap', className)}>
       <div className="flex flex-col">
         <Label className="mb-2" htmlFor="from-date">
           From

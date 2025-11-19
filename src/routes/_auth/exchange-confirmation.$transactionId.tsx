@@ -178,7 +178,7 @@ function RouteComponent() {
                 <span className="text-muted-foreground">Exchange Rate</span>
                 <span className="font-medium">
                   1 {exchangeData.from_asset.name} ={' '}
-                  {parseFloat(exchangeData.rate_value).toFixed(2)}{' '}
+                  {parseFloat(exchangeData.rate_value)}{' '}
                   {exchangeData.to_asset.name}
                 </span>
               </div>

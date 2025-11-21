@@ -132,7 +132,7 @@ export const LedgerStats = ({
               config={{
                 balance: { label: 'Balance', color: 'hsl(var(--chart-1))' },
               }}
-              className="h-80"
+              className="h-80 max-w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={balanceHistoryData}>
@@ -172,7 +172,7 @@ export const LedgerStats = ({
               config={{
                 value: { label: 'Amount', color: 'hsl(var(--chart-2))' },
               }}
-              className="h-80"
+              className="h-80 max-w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
@@ -268,9 +268,9 @@ export const LedgerStats = ({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Largest Credit */}
         {statsData.largest_entries.largest_credit && (
-          <Card className="bg-gradient-to-br from-green-900/30 to-slate-900 border-slate-700">
+          <Card className="bg-gradient-to-br from-chart-3 to-chart-4 border-slate-700">
             <CardHeader>
-              <CardDescription className="text-slate-400">
+              <CardDescription className="text-foreground">
                 Largest Credit
               </CardDescription>
             </CardHeader>
@@ -278,13 +278,13 @@ export const LedgerStats = ({
               <p className="text-2xl font-bold text-green-400">
                 +{statsData.largest_entries.largest_credit.amount}
               </p>
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-foreground">
                 {statsData.largest_entries.largest_credit.reference_type}
               </p>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-foreground/70">
                 {statsData.largest_entries.largest_credit.date}
               </p>
-              <p className="text-xs italic text-slate-400">
+              <p className="text-xs italic text-foreground">
                 {statsData.largest_entries.largest_credit.description}
               </p>
             </CardContent>
@@ -293,9 +293,9 @@ export const LedgerStats = ({
 
         {/* Largest Debit */}
         {statsData.largest_entries.largest_debit && (
-          <Card className="bg-gradient-to-br from-red-900/30 to-slate-900 border-slate-700">
+          <Card className="bg-gradient-to-br from-chart-1 to-chart-2 border-slate-700">
             <CardHeader>
-              <CardDescription className="text-slate-400">
+              <CardDescription className="text-foreground">
                 Largest Debit
               </CardDescription>
             </CardHeader>
@@ -303,13 +303,13 @@ export const LedgerStats = ({
               <p className="text-2xl font-bold text-red-400">
                 -{statsData.largest_entries.largest_debit.amount}
               </p>
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-foreground">
                 {statsData.largest_entries.largest_debit.reference_type}
               </p>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-foreground/70">
                 {statsData.largest_entries.largest_debit.date}
               </p>
-              <p className="text-xs italic text-slate-400">
+              <p className="text-xs italic text-foreground">
                 {statsData.largest_entries.largest_debit.description}
               </p>
             </CardContent>

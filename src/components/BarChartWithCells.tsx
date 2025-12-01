@@ -29,7 +29,7 @@ export const BarChartWithCells = ({
 }: BarChartWithCells) => {
   return (
     <ChartContainer config={config} className={cn('h-[300px] max-w-full', className)}>
-      <ResponsiveContainer>
+      <ResponsiveContainer width="100%" height="100%">
         <BarChart className='max-w-full' data={data}>
           <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
           <XAxis dataKey={xAxisKey} />

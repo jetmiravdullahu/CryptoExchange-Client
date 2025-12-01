@@ -7,8 +7,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import {  ChartContainer } from './ui/chart'
-import type {ChartConfig} from './ui/chart';
+import { ChartContainer } from './ui/chart'
+import type { ChartConfig } from './ui/chart'
 import { cn } from '@/lib/utils'
 
 interface BarChartComponentProps {
@@ -28,7 +28,10 @@ export const BarChartComponent = ({
 }: BarChartComponentProps) => {
   return (
     <ChartContainer config={config} className={cn('h-[300px]', className)}>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer
+        width="100%"
+        height="100%"
+      >
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
           <XAxis dataKey={xAxisKey} />

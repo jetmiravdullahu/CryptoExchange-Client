@@ -175,7 +175,7 @@ function RouteComponent() {
   ]
 
   return (
-    <div className="space-y-6 max-w-full">
+    <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">
           Dashboard Overview
@@ -192,15 +192,15 @@ function RouteComponent() {
         ))}
       </div>
 
-      <div className="grid gap-4 2xl:grid-cols-2 max-w-full overflow-hidden">
-        <Card className='max-w-full overflow-hidden'>
-          <CardHeader className='max-w-full'>
+      <div className="grid gap-4 2xl:grid-cols-2">
+        <Card className="max-w-full">
+          <CardHeader className="">
             <CardTitle>Global Balances by Asset</CardTitle>
             <CardDescription>
               Total balance across all locations
             </CardDescription>
           </CardHeader>
-          <CardContent className="px-0 md:px-6 flex max-w-full justify-center">
+          <CardContent className="px-0 md:px-6 ">
             <BarChartWithCells
               data={dashboardData.global_balances.by_asset}
               config={{
@@ -266,19 +266,12 @@ function RouteComponent() {
             <CardTitle>Location Balances</CardTitle>
             <CardDescription>Total balance by location</CardDescription>
           </CardHeader>
-          <CardContent className="flex justify-center">
+          <CardContent className="max-w-full">
             <BarChartComponent
               dataKeys={dataKeys}
               data={chartData}
               xAxisKey="location_name"
               config={
-              //   {
-              //   '1': { label: 'Asset 1', color: '#3b82f6' },
-              //   '2': { label: 'Asset 2', color: '#10b981' },
-              //   '3': { label: 'Asset 3', color: '#f59e0b' },
-              //   '4': { label: 'Asset 3', color: '#f59e0b' },
-              //   '123': { label: 'Asset 3', color: '#f59e0b' },
-              // }
               dataKeys.reduce((acc, asset) => {
                 acc[asset] = { label: asset, color: ASSET_COLORS(dataKeys)[asset] }
                 return acc

@@ -19,8 +19,14 @@ export const Pagination = <T,>({ table }: { table: Table<T> }) => {
   }
   return (
     <div className="flex flex-col sm:flex-row gap-4 mt-4">
-      <div className="flex flex-col justify-center items-center sm:flex-row gap-4 w-full">
+      <div className="flex flex-col justify-center max-w-full items-center md:flex-row gap-4 w-full flex-wrap">
         <div className="flex items-center gap-2">
+          <div>
+            <span className="text-sm text-muted-foreground whitespace-nowrap">
+              Total Rows:
+            </span>{' '}
+            {table.options.rowCount}
+          </div>
           <span className="text-sm text-muted-foreground whitespace-nowrap">
             Rows per page:
           </span>
@@ -59,7 +65,7 @@ export const Pagination = <T,>({ table }: { table: Table<T> }) => {
           />
         </div>
 
-        <div className="flex ml-auto items-center gap-2">
+        <div className="flex md:ml-auto items-center gap-2">
           <Button
             variant="outline"
             size="icon"

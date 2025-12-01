@@ -36,7 +36,6 @@ export const AccountsTable = ({
     >,
   ) => void
 }) => {
-
   const navigate = useNavigate()
 
   const columns = useMemo<Array<ColumnDef<Account, any>>>(
@@ -197,6 +196,13 @@ export const AccountsTable = ({
             </TableRow>
           )}
         </TableBody>
+        <div className="h-4" />
+        <div className='mb-4'>
+          <span className="text-sm text-muted-foreground whitespace-nowrap">
+            Total Rows:
+          </span>{' '}
+          {table.options.rowCount}
+        </div>
       </Table>
     </>
   )

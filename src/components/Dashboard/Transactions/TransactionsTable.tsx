@@ -15,15 +15,20 @@ import {
 } from '../../ui/table'
 import { Pagination } from '../../Pagination'
 import { Badge } from '../../ui/badge'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../../ui/tooltip'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../../ui/tooltip'
 import type {
   ColumnDef,
   PaginationState,
   SortingState,
 } from '@tanstack/react-table'
 import type {
+  ITransaction,
   TransactionStatusType,
-  TransactionsTableData,
 } from '@/types/transaction'
 
 export const TransactionsTable = ({
@@ -33,13 +38,15 @@ export const TransactionsTable = ({
   setPagination,
   sorting,
   setSorting,
+  onRowClick,
 }: {
-  transactions: Array<TransactionsTableData>
+  transactions: Array<ITransaction>
   totalTransactions: number
   pagination: PaginationState
   setPagination: React.Dispatch<React.SetStateAction<PaginationState>>
   sorting: SortingState
   setSorting: React.Dispatch<React.SetStateAction<SortingState>>
+  onRowClick?: (transaction: ITransaction) => void
 }) => {
   function getStatusVariant(status: TransactionStatusType) {
     switch (status) {
@@ -54,24 +61,47 @@ export const TransactionsTable = ({
     }
   }
 
-  const columns = useMemo<Array<ColumnDef<TransactionsTableData, any>>>(
+  function getBuySellVariant(isFiat: boolean) {
+    return isFiat ? 'default' : 'destructive'
+  }
+
+  const columns = useMemo<Array<ColumnDef<ITransaction, any>>>(
     () => [
       {
+        accessorKey: 'type',
+        cell: ({ row }) => {
+          return (
+            <span>
+              <Badge
+                variant={getBuySellVariant(
+                  row.original.to_asset.asset_class === 'FIAT',
+                )}
+              >
+                {row.original.to_asset.asset_class === 'FIAT'
+                  ? 'Buying'
+                  : 'Selling'}
+              </Badge>
+            </span>
+          )
+        },
+        header: () => <span></span>,
+      },
+      {
         accessorKey: 'from_asset',
-        cell: (info) => (
+        cell: ({row, getValue}) => (
           <span className="font-medium">
-            {parseFloat(info.getValue().value).toFixed(2)}{' '}
-            {info.getValue().name}
+            {parseFloat(row.original.from_amount).toFixed(2)}{' '}
+            {getValue().name}
           </span>
         ),
         header: () => <span>From</span>,
       },
       {
         accessorKey: 'to_asset',
-        cell: (info) => (
+        cell: ({row, getValue}) => (
           <span className="font-medium">
-            {parseFloat(info.getValue().value).toFixed(2)}{' '}
-            {info.getValue().name}
+            {parseFloat(row.original.to_amount).toFixed(2)}{' '}
+            {getValue().name}
           </span>
         ),
         header: () => <span>To</span>,
@@ -109,7 +139,10 @@ export const TransactionsTable = ({
                     </div>
                   </div>
                 </TooltipTrigger>
-                <TooltipContent side="top" className="max-w-[300px] h-min wrap-break-word">
+                <TooltipContent
+                  side="top"
+                  className="max-w-[300px] h-min wrap-break-word"
+                >
                   <p>{reason}</p>
                 </TooltipContent>
               </Tooltip>
@@ -123,20 +156,6 @@ export const TransactionsTable = ({
         accessorKey: 'location',
         cell: (info) => <span>{info.getValue().name}</span>,
         header: () => <span>Location</span>,
-      },
-      {
-        accessorKey: 'fee_flat',
-        cell: ({ row, getValue }) => {
-          const fiatAsset =
-            row.original.from_asset.asset_class === 'FIAT'
-              ? row.original.from_asset
-              : row.original.to_asset
-
-          const fiatName = fiatAsset.name
-
-          return `${parseFloat(getValue()).toFixed(2)} ${fiatName}`
-        },
-        header: () => <span>Fee</span>,
       },
     ],
     [],
@@ -170,10 +189,7 @@ export const TransactionsTable = ({
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead
-                  key={header.id}
-                  colSpan={header.colSpan}
-                >
+                <TableHead key={header.id} colSpan={header.colSpan}>
                   {header.isPlaceholder ? null : (
                     <>
                       <div
@@ -205,7 +221,7 @@ export const TransactionsTable = ({
           {table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => {
               return (
-                <TableRow key={row.id}>
+                <TableRow key={row.id} onClick={() => onRowClick?.(row.original)}>
                   {row.getVisibleCells().map((cell) => {
                     return (
                       <TableCell key={cell.id}>

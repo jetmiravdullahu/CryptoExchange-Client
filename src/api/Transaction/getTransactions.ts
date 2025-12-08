@@ -1,13 +1,16 @@
 import api from '..'
-import type { ITransaction } from '@/types/transaction';
+import type { ITransaction } from '@/types/transaction'
 import type { PaginatedResponse } from '../types'
-
 
 export const getTransactions = async (
   location_id?: string,
   opts?: {
     pagination: { pageIndex: number; pageSize: number }
     sorting: Array<{ id: string; desc: boolean }>
+    filters?: {
+      from?: string
+      to?: string
+    }
   },
 ): Promise<PaginatedResponse<ITransaction>['data']> => {
   const { data } = await api.get<PaginatedResponse<ITransaction>>(
@@ -20,6 +23,8 @@ export const getTransactions = async (
           page: opts.pagination.pageIndex + 1,
           sort: opts.sorting[0].id,
           direction: opts.sorting[0].desc ? 'desc' : 'asc',
+          date_from: opts.filters?.from,
+          date_to: opts.filters?.to,
         }),
       },
     },

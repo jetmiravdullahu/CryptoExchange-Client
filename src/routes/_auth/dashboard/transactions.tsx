@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
+import type { ITransaction } from '@/types/transaction'
 import { TransactionsTable } from '@/components/Dashboard/Transactions/TransactionsTable'
 import {
   Card,
@@ -20,6 +21,7 @@ import { Button } from '@/components/ui/button'
 import { TransactionFormDialog } from '@/components/Dashboard/Transactions/TransactionFormModal'
 import { getLocationOptionsQuery } from '@/hooks/api/Location/useGetLocationOptionsQuery'
 import { getAssetOptionsQuery } from '@/hooks/api/Asset/useGetAssetOptionsQuery'
+import { TransactionDetailsModal } from '@/components/Dashboard/Transactions/TransactionDetailsModal'
 
 export const Route = createFileRoute('/_auth/dashboard/transactions')({
   component: RouteComponent,
@@ -33,16 +35,20 @@ export const Route = createFileRoute('/_auth/dashboard/transactions')({
 })
 
 function RouteComponent() {
-
   const {
     data: transactionsData,
     pagination,
     setPagination,
     setSorting,
     sorting,
+    filters,
+    onSetFilters,
   } = useGetTransactions()
 
   const [open, setOpen] = useState(false)
+
+  const [transactionDetails, setTransactionDetails] =
+    useState<null | ITransaction>(null)
 
   return (
     <div className="space-y-6">
@@ -69,7 +75,11 @@ function RouteComponent() {
               Create Transaction
             </Button>
           </div>
-          <TableFilters options={{}} onSetFilters={() => {}} />
+          <TableFilters
+            options={filters}
+            onSetFilters={onSetFilters}
+            showTypeFilter={false}
+          />
         </CardHeader>
         <CardContent>
           <div className="rounded-md border px-4">
@@ -78,13 +88,21 @@ function RouteComponent() {
               setPagination={setPagination}
               sorting={sorting}
               setSorting={setSorting}
-              totalTransactions={transactionsData.pagination.total}
-              transactions={transactionsData.transactions}
+              totalTransactions={transactionsData.total}
+              transactions={transactionsData.data}
+              onRowClick={setTransactionDetails}
             />
           </div>
         </CardContent>
       </Card>
       {open && <TransactionFormDialog open={open} onOpenChange={setOpen} />}
+      {transactionDetails && (
+        <TransactionDetailsModal
+          transaction={transactionDetails}
+          open={!!transactionDetails}
+          onClose={() => setTransactionDetails(null)}
+        />
+      )}
     </div>
   )
 }

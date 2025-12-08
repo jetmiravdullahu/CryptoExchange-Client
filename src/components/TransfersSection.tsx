@@ -87,8 +87,6 @@ export const TransfersSection = () => {
               totalTransfers={transfers.total}
               setSorting={setSorting}
               onViewTransfer={onViewTransfer}
-              sellerLocation={user.user.location_id}
-              currentUserRole={user.user.role}
             />
           </div>
         </CardContent>

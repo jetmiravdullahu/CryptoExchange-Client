@@ -70,7 +70,42 @@ export interface IUser {
   email_verified_at: string | null
   last_login_at: string | null
   location: ILocation | null
-  metadata: Array<Record<string, any>>
+  metadata: {
+    phone: string | null
+    profile: {
+      bio: string | null
+      avatar_url: string | null
+      date_of_birth: string | null
+    }
+    version: string
+    security: {
+      '2fa_enabled': boolean
+      locked_until: string | null
+      last_password_change: string
+      failed_login_attempts: number
+    }
+    created_by: string
+    preferences: {
+      language: string
+      timezone: string
+      date_format: string
+      time_format: string
+      notifications: {
+        sms: boolean
+        push: boolean
+        email: boolean
+      }
+      currency_display: string
+    }
+    seller_info?: {
+      hire_date: string
+      employee_id: string
+      location_city: string
+      location_code: string
+      shift_preference: string
+    }
+    phone_verified: boolean
+  }
   created_at: string
   updated_at: string
 }

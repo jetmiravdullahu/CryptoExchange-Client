@@ -1,14 +1,20 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import dayjs from 'dayjs'
 import type { PaginationState, SortingState } from '@tanstack/react-table'
-import type { TransactionsTableData } from '@/types/transaction'
 import { getTransactions } from '@/api/Transaction/getTransactions'
+
+interface FilterState {
+  from?: string
+  to?: string
+}
 
 export const getTransactionsQuery = (
   location_id?: string,
   opts?: {
     pagination: PaginationState
     sorting: SortingState
+    filters: FilterState
   },
 ) =>
   queryOptions({
@@ -18,6 +24,7 @@ export const getTransactionsQuery = (
       opts || {
         pagination: initialPagination,
         sorting: initialSorting,
+        filters: initialFilters,
       },
     ],
     queryFn: () =>
@@ -26,43 +33,9 @@ export const getTransactionsQuery = (
         opts || {
           pagination: initialPagination,
           sorting: initialSorting,
+          filters: initialFilters,
         },
       ),
-    select: (data) => {
-      return {
-        transactions: data.data.map((transaction) => ({
-          id: transaction.id,
-          from_asset: {
-            id: transaction.from_asset.id,
-            name: transaction.from_asset.name,
-            value: transaction.from_amount,
-            asset_class: transaction.from_asset.asset_class,
-          },
-          to_asset: {
-            id: transaction.to_asset.id,
-            name: transaction.to_asset.name,
-            value: transaction.to_amount,
-            asset_class: transaction.to_asset.asset_class,
-          },
-          fee_flat: transaction.fee_flat,
-          rate_value: transaction.rate_value,
-          status: transaction.status,
-          location: {
-            id: transaction.location.id,
-            name: transaction.location.name,
-          },
-          cancelled_reason: transaction.cancellation_reason,
-        })) as Array<TransactionsTableData>,
-        pagination: {
-          current_page: data.current_page,
-          from: data.from,
-          last_page: data.last_page,
-          per_page: data.per_page,
-          to: data.to,
-          total: data.total,
-        },
-      }
-    },
   })
 
 const initialPagination: PaginationState = {
@@ -77,21 +50,36 @@ const initialSorting: SortingState = [
   },
 ]
 
+const initialFilters = {
+  from: dayjs().startOf('month').format('YYYY-MM-DD'),
+  to: dayjs().format('YYYY-MM-DD'),
+}
+
 export const useGetTransactions = (location_id?: string) => {
   const [pagination, setPagination] =
     useState<PaginationState>(initialPagination)
 
   const [sorting, setSorting] = useState<SortingState>(initialSorting)
+  const [filters, setFilters] = useState<FilterState>(initialFilters)
+
+  const onSetFilters = (key: string, value?: string) => {
+    const newFilters = { ...filters, [key]: value }
+    setFilters(newFilters)
+    setPagination({ ...pagination, pageIndex: 0 })
+  }
 
   const { data } = useSuspenseQuery(
     getTransactionsQuery(location_id, {
       pagination,
       sorting,
+      filters,
     }),
   )
 
   return {
     data,
+    filters,
+    onSetFilters,
     pagination,
     sorting,
     setPagination,

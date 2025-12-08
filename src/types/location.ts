@@ -63,7 +63,40 @@ export type ILocation = {
   timezone: string
   user: IUser
   is_active: boolean
-  metadata: Array<Record<string, any>>
+  metadata: {
+    email: string | null
+    floor: string | null
+    notes: string | null
+    phone: string | null
+    staff: {
+      manager: string | null
+      sellers: Array<string>
+      security: string | null
+    }
+    limits: {
+      daily_cash_limit: string | null
+      daily_crypto_limit: string | null
+      max_single_transaction: string | null
+    }
+    district: string | null
+    landmark: string | null
+    equipment: {
+      printers: number
+      computers: number
+      cash_counters: number
+      pos_terminals: number
+    }
+    operational: {
+      type: string | null
+      size_sqm: number | null
+      has_vault: boolean
+      has_parking: boolean
+      has_security: boolean
+      counter_positions: number | null
+    }
+    postal_code: string | null
+    business_hours: Record<string, { open: string; close: string } | null>
+  }
   created_at: string
   updated_at: string
 }

@@ -68,8 +68,7 @@ export function useGetAccountLedger(id: string) {
   const [sorting, setSorting] = useState<SortingState>(initialSorting)
   const [filters, setFilters] = useState<FilterState>(initialFilters)
 
-  const onSetFilters = (key: keyof typeof filters, value?: string) => {
-    console.log({ key, value })
+  const onSetFilters = (key: string, value?: string) => {
     const newFilters = { ...filters, [key]: value }
     setFilters(newFilters)
     setPagination({ ...pagination, pageIndex: 0 })

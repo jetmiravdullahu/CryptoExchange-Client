@@ -39,7 +39,6 @@ import type {
   TransferStatus,
   TransferStatusActions,
 } from '@/types/transfer'
-import type { UserRole } from '@/types/user'
 import { Button } from '@/components/ui/button'
 import { TransferStatusModal } from '@/components/TransferStatusModal'
 import { useStartTransitMutation } from '@/hooks/api/Transfer/useStartTransit'
@@ -50,6 +49,7 @@ import { useCancelTransferMutation } from '@/hooks/api/Transfer/useCancelTransfe
 import { getTransfersQuery } from '@/hooks/api/Transfer/useGetTransfers'
 import { cn } from '@/lib/utils'
 import { getAccountsQuery } from '@/hooks/api/Account/useGetAccounts'
+import { useGetCurrentUser } from '@/hooks/api/Auth/useGetCurrentUser'
 
 export const TransfersTable = ({
   transfers,
@@ -59,8 +59,6 @@ export const TransfersTable = ({
   sorting,
   setSorting,
   onViewTransfer,
-  sellerLocation,
-  currentUserRole,
 }: {
   transfers: Array<ITransfer>
   totalTransfers: number
@@ -69,8 +67,6 @@ export const TransfersTable = ({
   sorting: SortingState
   setSorting: React.Dispatch<React.SetStateAction<SortingState>>
   onViewTransfer: (transfer: ITransfer) => void
-  sellerLocation?: string
-  currentUserRole: UserRole
 }) => {
   const queryClient = useQueryClient()
   const [statusChangeTransaction, setStatusChangeTransaction] =
@@ -81,6 +77,8 @@ export const TransfersTable = ({
   const { mutateAsync: rejectTransfer } = useRejectTransferMutation()
   const { mutateAsync: confirmTransfer } = useConfirmTransferMutation()
   const { mutateAsync: returnTransfer } = useReturnTransferMutation()
+
+  const { data: currentUser} = useGetCurrentUser()
 
   const actionsMap: Record<TransferStatusActions, (reason?: string) => any> = {
     confirm: () =>
@@ -131,12 +129,12 @@ export const TransfersTable = ({
       {
         accessorKey: 'type',
         cell: ({ row }) => {
-          if (currentUserRole !== 'SELLER') return null
+          if (currentUser.user.role !== 'SELLER') return null
           return (
             <span>
-              {sellerLocation === row.original.from_location_id ? (
+              {currentUser.user.location_id === row.original.from_location_id ? (
                 <ArrowDownLeft className="h-4 w-4" />
-              ) : sellerLocation === row.original.to_location_id ? (
+              ) : currentUser.user.location_id === row.original.to_location_id ? (
                 <ArrowUpRight className="h-4 w-4" />
               ) : null}
             </span>
@@ -305,7 +303,7 @@ export const TransfersTable = ({
                   key={row.id}
                   className={cn(
                     'cursor-pointer',
-                    sellerLocation === row.original.to_location_id &&
+                    currentUser.user.location_id === row.original.to_location_id &&
                       'bg-primary/15',
                   )}
                   onClick={() => onViewTransfer(row.original)}
@@ -346,8 +344,8 @@ export const TransfersTable = ({
         }}
         transfer={statusChangeTransaction}
         onStatusChange={onStatusChangeHandler}
-        currentUserRole={currentUserRole}
-        isIncoming={sellerLocation === statusChangeTransaction?.to_location_id}
+        currentUserRole={currentUser.user.role}
+        isIncoming={currentUser.user.location_id === statusChangeTransaction?.to_location_id}
       />
     </>
   )

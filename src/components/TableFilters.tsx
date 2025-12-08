@@ -14,13 +14,15 @@ type TableFiltersProps = {
     to?: string
     type?: string
   }
-  onSetFilters: (key: 'from' | 'to' | 'type', value?: string) => void
+  onSetFilters: (key: string, value?: string) => void
+  showTypeFilter?: boolean
 }
 
 export default function TableFilters({
   options,
   onSetFilters,
   className,
+  showTypeFilter = true,
 }: TableFiltersProps) {
   const formatDate = (d?: string) => (d ? dayjs(d).format('DD/MM/YYYY') : '')
 
@@ -108,39 +110,41 @@ export default function TableFilters({
         </Popover>
       </div>
 
-      <div className="flex flex-col min-w-[160px]">
-        <Label className="mb-2" htmlFor="type">
-          Type
-        </Label>
-        <SelectInput
-          id="type"
-          name="test"
-          label="Type"
-          onValueChange={(value) => onSetFilters('type', value)}
-          options={[
-            {
-              value: 'MANUAL_ADJUSTMENT',
-              label: 'Manual Adjustment',
-            },
-            {
-              value: 'TRANSACTION',
-              label: 'Transaction',
-            },
-            {
-              value: 'TRANSFER',
-              label: 'Transfer',
-            },
-            {
-              value: 'CORRECTION',
-              label: 'Correction',
-            },
-          ]}
-          placeholder="Type"
-          value={options.type}
-          clearable
-          onClear={() => onSetFilters('type')}
-        />
-      </div>
+      {showTypeFilter && (
+        <div className="flex flex-col min-w-[160px]">
+          <Label className="mb-2" htmlFor="type">
+            Type
+          </Label>
+          <SelectInput
+            id="type"
+            name="test"
+            label="Type"
+            onValueChange={(value) => onSetFilters('type', value)}
+            options={[
+              {
+                value: 'MANUAL_ADJUSTMENT',
+                label: 'Manual Adjustment',
+              },
+              {
+                value: 'TRANSACTION',
+                label: 'Transaction',
+              },
+              {
+                value: 'TRANSFER',
+                label: 'Transfer',
+              },
+              {
+                value: 'CORRECTION',
+                label: 'Correction',
+              },
+            ]}
+            placeholder="Type"
+            value={options.type}
+            clearable
+            onClear={() => onSetFilters('type')}
+          />
+        </div>
+      )}
     </div>
   )
 }

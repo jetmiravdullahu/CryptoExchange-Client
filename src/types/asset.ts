@@ -37,7 +37,15 @@ export interface IAsset {
   min_amount: string
   max_amount: string | null
   is_active: boolean
-  metadata: Array<Record<string, any>>
+  metadata: {
+    iso_code: string
+    currency_name: string
+    display_format: string
+    display_symbol: string
+    symbol_position: 'before' | 'after'
+    decimal_separator: string
+    thousands_separator: string
+  }
   created_at: string
   updated_at: string
 }

@@ -32,8 +32,8 @@ export const TransactionsSection = () => {
       <CardContent>
         <div className="rounded-md border px-4">
           <TransactionsTable
-            totalTransactions={transactionsData.pagination.total}
-            transactions={transactionsData.transactions}
+            totalTransactions={transactionsData.total}
+            transactions={transactionsData.data}
             pagination={pagination}
             setPagination={setPagination}
             sorting={sorting}

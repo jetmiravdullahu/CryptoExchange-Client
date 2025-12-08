@@ -1,7 +1,7 @@
-import type { IAsset } from "./asset"
-import type { ILocation } from "./location"
-import type { FeeType } from "./locationFee"
-import type { IUser } from "./user"
+import type { IAsset } from './asset'
+import type { ILocation } from './location'
+import type { FeeType } from './locationFee'
+import type { IUser } from './user'
 
 export type TransactionStatusType =
   | 'PENDING'
@@ -21,6 +21,9 @@ export interface ITransaction {
   fee_basis_type: FeeType
   fee_basis_value: string
   status: TransactionStatusType
+  customer_name: string
+  customer_email: string
+  customer_phone: string
   completed_at: string | null
   cancelled_at: string | null
   cancellation_reason: string | null
@@ -29,7 +32,9 @@ export interface ITransaction {
   rate_expires_at: string
   id: string
   transaction_ref: string
+  metadata: Record<string, any>
   updated_at: string
+  updated_by?: IUser
   created_at: string
   location: ILocation
   from_asset: IAsset

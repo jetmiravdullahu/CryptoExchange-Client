@@ -78,7 +78,6 @@ function RouteComponent() {
           <TableFilters
             options={filters}
             onSetFilters={onSetFilters}
-            showTypeFilter={false}
           />
         </CardHeader>
         <CardContent>

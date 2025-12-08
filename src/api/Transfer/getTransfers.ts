@@ -8,6 +8,7 @@ export const getTransfers = async (
   opts?: {
     pagination: { pageIndex: number; pageSize: number }
     sorting: Array<{ id: string; desc: boolean }>
+    filters: { from?: string; to?: string }
   },
 ): Promise<PaginatedResponse<ITransfer>['data']> => {
   const { data } = await api.get<PaginatedResponse<ITransfer>>(
@@ -20,6 +21,8 @@ export const getTransfers = async (
           page: opts.pagination.pageIndex + 1,
           sort: opts.sorting[0].id,
           direction: opts.sorting[0].desc ? 'desc' : 'asc',
+          date_from: opts.filters.from,
+          date_to: opts.filters.to,
         }),
       },
     },

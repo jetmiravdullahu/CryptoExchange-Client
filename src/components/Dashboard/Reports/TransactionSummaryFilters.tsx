@@ -1,10 +1,17 @@
 import dayjs from 'dayjs'
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { SelectInput } from './ui/select'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
+import { useGetAssetOptions } from '@/hooks/api/Asset/useGetAssetOptionsQuery'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { SelectInput } from '@/components/ui/select'
+import { MultiSelect } from '@/components/MultiSelect'
+import { useGetLocationOptions } from '@/hooks/api/Location/useGetLocationOptionsQuery'
 
 type TableFiltersProps = {
   onChange?: (filters: { from?: string; to?: string; type?: string }) => void
@@ -12,19 +19,21 @@ type TableFiltersProps = {
   options: {
     from?: string
     to?: string
-    type?: string
+    asset_id?: string
+    location_ids?: Array<string>
   }
-  onSetFilters: (key: string, value?: string) => void
-  showTypeFilter?: boolean
+  onSetFilters: (key: string, value?: string | Array<string>) => void
 }
 
-export default function TableFilters({
+export default function TransactionSummaryFilters({
   options,
   onSetFilters,
   className,
-  showTypeFilter = false,
 }: TableFiltersProps) {
   const formatDate = (d?: string) => (d ? dayjs(d).format('DD/MM/YYYY') : '')
+
+  const { data: assetOptions } = useGetAssetOptions()
+  const { data: locationOptions } = useGetLocationOptions()
 
   return (
     <div className={cn('flex gap-4 flex-wrap', className)}>
@@ -110,41 +119,32 @@ export default function TableFilters({
         </Popover>
       </div>
 
-      {showTypeFilter && (
-        <div className="flex flex-col min-w-[160px]">
-          <Label className="mb-2" htmlFor="type">
-            Type
-          </Label>
-          <SelectInput
-            id="type"
-            name="test"
-            label="Type"
-            onValueChange={(value) => onSetFilters('type', value)}
-            options={[
-              {
-                value: 'MANUAL_ADJUSTMENT',
-                label: 'Manual Adjustment',
-              },
-              {
-                value: 'TRANSACTION',
-                label: 'Transaction',
-              },
-              {
-                value: 'TRANSFER',
-                label: 'Transfer',
-              },
-              {
-                value: 'CORRECTION',
-                label: 'Correction',
-              },
-            ]}
-            placeholder="Type"
-            value={options.type}
-            clearable
-            onClear={() => onSetFilters('type')}
-          />
-        </div>
-      )}
+      <div className="flex flex-col min-w-[160px]">
+        <Label className="mb-2" htmlFor="asset_id">
+          Asset
+        </Label>
+        <SelectInput
+          id="asset_id"
+          name="asset_id"
+          onValueChange={(value) => onSetFilters('asset_id', value)}
+          label="Asset"
+          options={assetOptions}
+          placeholder="Asset"
+          value={options.asset_id}
+          clearable
+          onClear={() => onSetFilters('asset_id')}
+        />
+      </div>
+      <div className="flex flex-col min-w-[160px]">
+        <Label className="mb-2" htmlFor="asset_id">
+          Locations
+        </Label>
+        <MultiSelect
+          selected={options.location_ids || []}
+          options={locationOptions}
+          onChange={(data) => onSetFilters('location_ids', data)}
+        />
+      </div>
     </div>
   )
 }

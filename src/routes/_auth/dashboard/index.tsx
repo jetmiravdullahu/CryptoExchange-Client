@@ -11,6 +11,7 @@ import {
   Users,
   XCircle,
 } from 'lucide-react'
+import { Suspense } from 'react'
 import { Badge } from '@/components/ui/badge'
 import {
   Card,
@@ -29,11 +30,17 @@ import {
 } from '@/hooks/api/Dashboard/getDashboardStats'
 import { PostErrorComponent } from '@/components/PostErrorComponent'
 import { LoadingSpinner } from '@/components/LoadingComponent'
+import { getTransactionSummaryQuery } from '@/hooks/api/Report/useGetTransactionSummary'
+import {
+  TransactionSummaryCard,
+} from '@/components/Dashboard/Reports/TransactionSummaryCard'
+import { TransactionSummaryTableSkeleton } from '@/components/Dashboard/Reports/TransactionSummaryTableSkeleton'
 
 export const Route = createFileRoute('/_auth/dashboard/')({
   component: RouteComponent,
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData(getDashboardStatsQuery)
+    await context.queryClient.ensureQueryData(getTransactionSummaryQuery())
   },
   errorComponent: PostErrorComponent,
   pendingComponent: LoadingSpinner,
@@ -271,16 +278,29 @@ function RouteComponent() {
               dataKeys={dataKeys}
               data={chartData}
               xAxisKey="location_name"
-              config={
-              dataKeys.reduce((acc, asset) => {
-                acc[asset] = { label: asset, color: ASSET_COLORS(dataKeys)[asset] }
-                return acc
-              }, {} as Record<string, { label: string; color: string }>)
-            }
+              config={dataKeys.reduce(
+                (acc, asset) => {
+                  acc[asset] = {
+                    label: asset,
+                    color: ASSET_COLORS(dataKeys)[asset],
+                  }
+                  return acc
+                },
+                {} as Record<string, { label: string; color: string }>,
+              )}
             />
           </CardContent>
         </Card>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Transaction Summary</CardTitle>
+        </CardHeader>
+        <Suspense fallback={<TransactionSummaryTableSkeleton />}>
+          <TransactionSummaryCard />
+        </Suspense>
+      </Card>
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card>

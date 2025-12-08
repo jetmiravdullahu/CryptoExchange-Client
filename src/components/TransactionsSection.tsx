@@ -1,4 +1,5 @@
 import { TransactionsTable } from './Dashboard/Transactions/TransactionsTable'
+import TableFilters from './TableFilters'
 import {
   Card,
   CardContent,
@@ -15,6 +16,8 @@ export const TransactionsSection = () => {
     setPagination,
     setSorting,
     sorting,
+    filters,
+    onSetFilters,
   } = useGetTransactions()
 
   return (
@@ -23,11 +26,12 @@ export const TransactionsSection = () => {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle>All Transactions</CardTitle>
-            <CardDescription>
-              Manage transaction information and settings
+            <CardDescription className="mb-4">
+              Manage transactions and permissions
             </CardDescription>
           </div>
         </div>
+        <TableFilters options={filters} onSetFilters={onSetFilters} />
       </CardHeader>
       <CardContent>
         <div className="rounded-md border px-4">

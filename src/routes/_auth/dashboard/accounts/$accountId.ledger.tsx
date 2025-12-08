@@ -103,7 +103,7 @@ function RouteComponent() {
           </CollapsibleContent>
         </Collapsible>
 
-        <TableFilters options={filters} onSetFilters={onSetFilters} />
+        <TableFilters options={filters} onSetFilters={onSetFilters} showTypeFilter={true} />
 
         <Card>
           <CardHeader>

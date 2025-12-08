@@ -28,6 +28,8 @@ export const TransfersSection = () => {
     setPagination,
     sorting,
     setSorting,
+    filters,
+    onSetFilters,
   } = useGetTransfers()
 
   const onCreateTransfer = () => {
@@ -57,9 +59,9 @@ export const TransfersSection = () => {
       </div>
       <Card>
         <CardHeader>
-          <div className='max-w-full overflow-hidden'>
+          <div className="max-w-full overflow-hidden">
             <div className="flex flex-col mb-4 md:flex-row md:items-center md:justify-between gap-4">
-              <div className='w-full'>
+              <div className="w-full">
                 <CardTitle>
                   <span>All Transfers</span>
                 </CardTitle>
@@ -72,9 +74,10 @@ export const TransfersSection = () => {
                 Create Transfer
               </Button>
             </div>
-            {user.user.role === 'SELLER' && (
-              <TableFilters options={{}} onSetFilters={() => {}} />
-            )}
+            <TableFilters
+              options={filters}
+              onSetFilters={onSetFilters}
+            />
           </div>
         </CardHeader>
         <CardContent>

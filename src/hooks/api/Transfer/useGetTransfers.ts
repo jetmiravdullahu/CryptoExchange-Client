@@ -1,5 +1,6 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import dayjs from 'dayjs'
 import type { PaginationState, SortingState } from '@tanstack/react-table'
 import { getTransfers } from '@/api/Transfer/getTransfers'
 
@@ -8,6 +9,7 @@ export const getTransfersQuery = (
   opts?: {
     pagination: PaginationState
     sorting: SortingState
+    filters: FilterState
   },
 ) =>
   queryOptions({
@@ -17,6 +19,7 @@ export const getTransfersQuery = (
       opts || {
         pagination: initialPagination,
         sorting: initialSorting,
+        filters: initialFilters,
       },
     ],
     queryFn: () =>
@@ -25,9 +28,15 @@ export const getTransfersQuery = (
         opts || {
           pagination: initialPagination,
           sorting: initialSorting,
+          filters: initialFilters,
         },
       ),
   })
+
+interface FilterState {
+  from?: string
+  to?: string
+}
 
 const initialPagination: PaginationState = {
   pageIndex: 0,
@@ -41,16 +50,29 @@ const initialSorting: SortingState = [
   },
 ]
 
+const initialFilters = {
+  from: dayjs().startOf('month').format('YYYY-MM-DD'),
+  to: dayjs().format('YYYY-MM-DD'),
+}
+
 export const useGetTransfers = (location_id?: string) => {
   const [pagination, setPagination] =
     useState<PaginationState>(initialPagination)
 
   const [sorting, setSorting] = useState<SortingState>(initialSorting)
+  const [filters, setFilters] = useState<FilterState>(initialFilters)
+
+  const onSetFilters = (key: string, value?: string) => {
+    const newFilters = { ...filters, [key]: value }
+    setFilters(newFilters)
+    setPagination({ ...pagination, pageIndex: 0 })
+  }
 
   const { data } = useSuspenseQuery(
     getTransfersQuery(location_id, {
       pagination,
       sorting,
+      filters,
     }),
   )
 
@@ -60,5 +82,7 @@ export const useGetTransfers = (location_id?: string) => {
     sorting,
     setPagination,
     setSorting,
+    filters,
+    onSetFilters,
   }
 }

@@ -87,6 +87,7 @@ export const CurrencyConverter = ({
           size="icon"
           onClick={handleSwapAssets}
           className="rounded-full h-10 w-10 bg-transparent"
+          type='button'
         >
           <ArrowDownUp className="h-4 w-4" />
         </Button>
@@ -104,7 +105,7 @@ export const CurrencyConverter = ({
           value={toAsset.value}
           onValueChange={(value) => {
             handleToAssetChange(
-              assetOptions.find((asset) => asset.value === value)!,
+              assetOptions.find((asset) => asset.value === value) || toAsset,
             )
             resetErrors()
           }}

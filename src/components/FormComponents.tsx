@@ -14,12 +14,12 @@ import { Switch as ShadcnSwitch } from '@/components/ui/switch'
 import { Textarea as ShadcnTextarea } from '@/components/ui/textarea'
 import { useFieldContext, useFormContext } from '@/hooks/form-context'
 
-export function SubscribeButton({ label }: { label: string }) {
+export function SubscribeButton({ label, className }: { label: string | React.ReactNode ; className?: string }) {
   const form = useFormContext()
   return (
     <form.Subscribe selector={(state) => state.isSubmitting}>
       {(isSubmitting) => (
-        <Button type="submit" disabled={isSubmitting}>
+        <Button type="submit" className={className} disabled={isSubmitting}>
           {label}
         </Button>
       )}
@@ -27,7 +27,7 @@ export function SubscribeButton({ label }: { label: string }) {
   )
 }
 
-function ErrorMessages({
+export function ErrorMessages({
   errors,
 }: {
   errors: Array<string | { message: string }>

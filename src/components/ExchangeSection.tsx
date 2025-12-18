@@ -1,8 +1,10 @@
-import { Suspense } from 'react'
+import { Suspense, useRef, useState } from 'react'
 import { Eye } from 'lucide-react'
 import { useNavigate } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { AxiosError } from 'axios'
+import z from 'zod'
 import {
   Card,
   CardContent,
@@ -11,9 +13,11 @@ import {
   CardTitle,
 } from './ui/card'
 import { CurrencyConverter } from './CurrencyConverter'
-import { Button } from './ui/button'
 import { LocationFeeConfiguration } from './LocationFeeConfiguration'
 import { Badge } from './ui/badge'
+import { AddUserAccordion } from './AddUserAccordion'
+import type { AddUserAccordionRef } from './AddUserAccordion'
+import type { ValidationErrors } from '@/api/types'
 import { useGetAssetOptions } from '@/hooks/api/Asset/useGetAssetOptionsQuery'
 import { useCreateTransactionMutation } from '@/hooks/api/Transaction/useCreateTransaction'
 import { useExchangeCalculator } from '@/hooks/useCalculateCurrencyData'
@@ -21,10 +25,39 @@ import { useGetCurrentExchangeRateSuspenseQuery } from '@/hooks/api/ExchangeRate
 import { useGetCurrentLocationFeeSuspenseQuery } from '@/hooks/api/LocationFee/useGetCurrentLocationFee'
 import { getTransactionQuery } from '@/hooks/api/Transaction/useGetTransaction'
 import { getTransactionsQuery } from '@/hooks/api/Transaction/useGetTransactions'
+import { useAppForm } from '@/hooks/form'
+
+interface TransactionValidationErrors {
+  from_asset_id?: Array<string>
+  to_asset_id?: Array<string>
+}
+
+const addUserSchema = z.object({
+  firstName: z
+    .string()
+    .min(1, 'First name is required')
+    .min(2, 'First name must be at least 2 characters'),
+  lastName: z
+    .string()
+    .min(1, 'Last name is required')
+    .min(2, 'Last name must be at least 2 characters'),
+  personalNumberID: z
+    .string()
+    .min(1, 'Personal number ID is required')
+    .regex(/^[0-9]+$/, 'Personal number ID must contain only numbers')
+    .min(5, 'Personal number ID must be at least 5 characters'),
+})
 
 export const ExchangeSection = () => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const addUserFormRef = useRef<AddUserAccordionRef>(null)
+
+  const [transactionErrors, setTransactionErrors] =
+    useState<TransactionValidationErrors>({})
+
+  const [accordionValue, setAccordionValue] = useState<string>('')
+
   const { data: assetOptions } = useGetAssetOptions()
   const { mutate: createTransaction } = useCreateTransactionMutation()
   const { data: currentLocationFee } = useGetCurrentLocationFeeSuspenseQuery()
@@ -64,11 +97,12 @@ export const ExchangeSection = () => {
     initialFeeValue: currentLocationFee.fee_value.toString(),
   })
 
-  const handleReviewTrade = () => {
+  const handleReviewTrade = async () => {
     if (!amountFrom || !amountTo || !exchangeRate) {
       toast.error('Please enter valid amounts to trade.')
       return
     }
+
     createTransaction(
       {
         exchange_rate_id: currentExchangeRate.id,
@@ -101,81 +135,138 @@ export const ExchangeSection = () => {
             to: `/exchange-confirmation/${response.data.id}`,
           })
         },
+        onError: (error) => {
+          if (!(error instanceof AxiosError)) return
+          if (error.response?.status !== 422) return
+          const errors = error.response.data
+            .errors as ValidationErrors<TransactionValidationErrors>
+          setTransactionErrors({
+            from_asset_id: errors.from_asset_id,
+            to_asset_id: errors.to_asset_id,
+          })
+        },
       },
     )
   }
 
+  const form = useAppForm({
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      personalNumberID: '',
+    },
+    validators: {
+      onSubmit: (values) => {
+        if (accordionValue !== 'add-user') {
+          return null
+        }
+        const result = addUserSchema.safeParse(values.value)
+        if (result.success) return null
+        const flattened = result.error.flatten().fieldErrors
+        const errors: Record<string, string | undefined> = {}
+        for (const key of Object.keys(flattened)) {
+          const val = flattened[key as keyof typeof flattened]
+          errors[key] = Array.isArray(val) ? val.join(', ') : (val as any)
+        }
+        return {
+          form: 'Invalid data',
+          fields: errors,
+        }
+      },
+    },
+    onSubmit: () => {
+      handleReviewTrade()
+    },
+  })
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-5">
       <Card className="lg:col-span-2 relative">
-        <CardHeader>
-          <CardTitle className="flex justify-between items-center">
-            <div>Convert Currency</div>
-            <Badge
-              className="h-10 px-6 text-md"
-              variant={assetTo.class === 'FIAT' ? 'confirm' : 'destructive'}
-            >
-              {assetTo.class === 'FIAT' ? 'Buying' : 'Selling'}
-            </Badge>
-          </CardTitle>
-          {!!exchangeRate && (
-            <CardDescription>
-              Exchange rate: 1 {assetFrom.label} = {exchangeRate}{' '}
-              {assetTo.label}
-            </CardDescription>
-          )}
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <Suspense fallback={<div>Loading Converter...</div>}>
-            <CurrencyConverter
-              fromAmount={amountFrom}
-              toAmount={amountTo}
-              fromAsset={assetFrom}
-              toAsset={assetTo}
-              handleFromAssetChange={setAssetFrom}
-              handleFromValueChange={setAmountFrom}
-              handleToAssetChange={setAssetTo}
-              handleSwapAssets={handleSwapAssets}
-              handleToValueChange={setAmountTo}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            form.handleSubmit()
+          }}
+          className="space-y-4 pt-2"
+        >
+          <CardHeader>
+            <AddUserAccordion
+              ref={addUserFormRef}
+              accordionValue={accordionValue}
+              setAccordionValue={setAccordionValue}
+              form={form as any}
             />
-          </Suspense>
+            <CardTitle className="flex justify-between items-center">
+              <div>Convert Currency</div>
+              <Badge
+                className="h-10 px-6 text-md"
+                variant={assetTo.class === 'FIAT' ? 'confirm' : 'destructive'}
+              >
+                {assetTo.class === 'FIAT' ? 'Buying' : 'Selling'}
+              </Badge>
+            </CardTitle>
+            {!!exchangeRate && (
+              <CardDescription>
+                Exchange rate: 1 {assetFrom.label} = {exchangeRate}{' '}
+                {assetTo.label}
+              </CardDescription>
+            )}
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <Suspense fallback={<div>Loading Converter...</div>}>
+              <CurrencyConverter
+                fromAmount={amountFrom}
+                toAmount={amountTo}
+                fromAsset={assetFrom}
+                toAsset={assetTo}
+                handleFromAssetChange={setAssetFrom}
+                handleFromValueChange={setAmountFrom}
+                handleToAssetChange={setAssetTo}
+                handleSwapAssets={handleSwapAssets}
+                handleToValueChange={setAmountTo}
+                errors={transactionErrors}
+                resetErrors={() => setTransactionErrors({})}
+              />
+            </Suspense>
 
-          {!!parseFloat(amountFrom) && !!parseFloat(amountTo) && (
-            <div className="pt-4 border-t">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">
-                  Location Fee Applied:
-                </span>
-                <div className="flex gap-2 text-red-600">
-                  <span className="font-medium">
-                    - {Number(calculatedFee).toFixed(2)}
+            {!!parseFloat(amountFrom) && !!parseFloat(amountTo) && (
+              <div className="pt-4 border-t">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    Location Fee Applied:
                   </span>
-                  <span className="font-medium">
-                    {assetFrom.class === 'FIAT'
-                      ? assetFrom.label
-                      : assetTo.label}
-                  </span>
+                  <div className="flex gap-2 text-red-600">
+                    <span className="font-medium">
+                      - {Number(calculatedFee).toFixed(2)}
+                    </span>
+                    <span className="font-medium">
+                      {assetFrom.class === 'FIAT'
+                        ? assetFrom.label
+                        : assetTo.label}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-
-          <Button
-            className="h-12 w-full text-base gap-2"
-            size="lg"
-            onClick={handleReviewTrade}
-            disabled={!Number(amountFrom) || !Number(amountTo) || !exchangeRate}
-          >
-            {exchangeRate ? (
-              <>
-                <Eye className="h-4 w-4" />
-                Review Trade
-              </>
-            ) : (
-              <>No exchange rate found</>
             )}
-          </Button>
-        </CardContent>
+
+            <form.AppForm>
+              <form.SubscribeButton
+                className="h-12 w-full text-base gap-2"
+                label={
+                  exchangeRate ? (
+                    <>
+                      <Eye className="h-4 w-4" />
+                      Review Trade
+                    </>
+                  ) : (
+                    <>No exchange rate found</>
+                  )
+                }
+              />
+            </form.AppForm>
+          </CardContent>
+        </form>
       </Card>
 
       <div className="order-first lg:order-none">

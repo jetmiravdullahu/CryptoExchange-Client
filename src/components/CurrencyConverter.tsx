@@ -3,9 +3,15 @@ import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { SelectInput } from './ui/select'
+import { ErrorMessages } from './FormComponents'
 import type { IGetAssetOptionsResponseData } from '@/api/Asset/getAssetOptions'
 import { useGetAssetOptions } from '@/hooks/api/Asset/useGetAssetOptionsQuery'
 import { useGetCurrentExchangeRateSuspenseQuery } from '@/hooks/api/ExchangeRate/useGetCurrentExchangeRate'
+
+interface TransactionValidationErrors {
+  from_asset_id?: Array<string>
+  to_asset_id?: Array<string>
+}
 
 export const CurrencyConverter = ({
   fromAmount,
@@ -16,7 +22,9 @@ export const CurrencyConverter = ({
   handleFromValueChange,
   handleToAssetChange,
   handleToValueChange,
-  handleSwapAssets
+  handleSwapAssets,
+  errors,
+  resetErrors,
 }: {
   fromAsset: IGetAssetOptionsResponseData
   toAsset: IGetAssetOptionsResponseData
@@ -27,6 +35,8 @@ export const CurrencyConverter = ({
   handleToAssetChange: (asset: IGetAssetOptionsResponseData) => void
   handleToValueChange: (value: string) => void
   handleSwapAssets: () => Promise<void>
+  errors: TransactionValidationErrors
+  resetErrors: () => void
 }) => {
   const { data: assetOptions } = useGetAssetOptions()
   const { data: currentExchangeRate } = useGetCurrentExchangeRateSuspenseQuery({
@@ -44,11 +54,12 @@ export const CurrencyConverter = ({
           label="Hey"
           options={assetOptions}
           value={fromAsset.value}
-          onValueChange={(value) =>
+          onValueChange={(value) => {
             handleFromAssetChange(
               assetOptions.find((asset) => asset.value === value)!,
             )
-          }
+            resetErrors()
+          }}
           className="text-lg !h-12"
           placeholder="From Asset"
         />
@@ -61,10 +72,12 @@ export const CurrencyConverter = ({
             onChange={(e) => {
               if (!currentExchangeRate.rate) return
               handleFromValueChange(e.target.value)
+              resetErrors()
             }}
             disabled={!currentExchangeRate.rate}
             className="text-lg h-14 pr-16"
           />
+          <ErrorMessages errors={errors.from_asset_id || []} />
         </div>
       </div>
 
@@ -89,11 +102,12 @@ export const CurrencyConverter = ({
             return option.class !== fromAsset.class
           })}
           value={toAsset.value}
-          onValueChange={(value) =>
+          onValueChange={(value) => {
             handleToAssetChange(
               assetOptions.find((asset) => asset.value === value)!,
             )
-          }
+            resetErrors()
+          }}
           className="text-lg !h-12"
           placeholder="To Asset"
         />
@@ -107,9 +121,11 @@ export const CurrencyConverter = ({
             onChange={(e) => {
               if (!currentExchangeRate.rate) return
               handleToValueChange(e.target.value)
+              resetErrors()
             }}
             disabled={!currentExchangeRate.rate}
           />
+          <ErrorMessages errors={errors.to_asset_id || []} />
         </div>
       </div>
     </div>

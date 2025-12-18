@@ -157,7 +157,7 @@ function RouteComponent() {
                 <div className="text-center flex-1">
                   <p className="text-sm text-muted-foreground mb-1">You Send</p>
                   <p className="text-2xl font-bold">
-                    {parseFloat(exchangeData.from_amount).toFixed(2)}{' '}
+                    {parseFloat(exchangeData.from_amount).toFixed(exchangeData.from_asset.precision)}{' '}
                     {exchangeData.from_asset.name}
                   </p>
                 </div>
@@ -167,7 +167,9 @@ function RouteComponent() {
                     You Receive
                   </p>
                   <p className="text-2xl font-bold text-primary">
-                    {parseFloat(exchangeData.to_amount).toFixed(2)}{' '}
+                    {exchangeData.to_asset.asset_class === 'FIAT'
+                      ? (parseFloat(exchangeData.to_amount) - parseFloat(exchangeData.fee_flat)).toFixed(exchangeData.to_asset.precision)
+                      : parseFloat(exchangeData.to_amount).toFixed(exchangeData.to_asset.precision)}{' '}
                     {exchangeData.to_asset.name}
                   </p>
                 </div>
@@ -178,7 +180,7 @@ function RouteComponent() {
                 <span className="text-muted-foreground">Exchange Rate</span>
                 <span className="font-medium">
                   1 {exchangeData.from_asset.name} ={' '}
-                  {parseFloat(exchangeData.rate_value)}{' '}
+                  {parseFloat(exchangeData.rate_value).toFixed(exchangeData.to_asset.precision)}{' '}
                   {exchangeData.to_asset.name}
                 </span>
               </div>

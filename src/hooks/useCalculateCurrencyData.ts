@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 import { getCurrentExchangeRateQuery } from './api/ExchangeRate/useGetCurrentExchangeRate'
+import { useGetAssetOptions } from './api/Asset/useGetAssetOptionsQuery'
 import type { FeeType } from '@/types/locationFee'
 
 // Types
@@ -48,6 +49,7 @@ export const useExchangeCalculator = (
 ): UseExchangeCalculatorReturn => {
   const queryClient = useQueryClient()
 
+    const { data: assetOptions } = useGetAssetOptions()
   // Asset configurations
   const [assetFrom, setAssetFromState] = useState<Asset>(
     config.initialAssetFrom,
@@ -278,7 +280,11 @@ export const useExchangeCalculator = (
 
   const setAssetFrom = async (asset: Asset): Promise<void> => {
     let rate = '0'
-
+    if(asset.class !== assetFrom.class) {
+      setAssetToState(assetOptions.find(
+        (a) => a.class !== asset.class,
+      )!)
+    }
     try {
       if (asset.value !== assetTo.value) {
         const rateResp = await queryClient.ensureQueryData(
@@ -358,6 +364,13 @@ export const useExchangeCalculator = (
 
   const handleSwapAssets = async (): Promise<void> => {
     let rate = '0'
+    const currAssetFrom = assetOptions.find(
+      (asset) => asset.value === assetFrom.value,
+    )!
+    const currAssetTo = assetOptions.find(
+      (asset) => asset.value === assetTo.value,
+    )!
+
 
     try {
       if (assetTo.value !== assetFrom.value) {
@@ -379,8 +392,8 @@ export const useExchangeCalculator = (
       newExchangeRate: parseFloat(rate),
     })
     setExchangeRate(parseFloat(rate))
-    setAssetFromState(assetTo)
-    setAssetToState(assetFrom)
+    setAssetFromState(currAssetTo)
+    setAssetToState(currAssetFrom)
     setAmountFromState(amountTo)
     setAmountToState(result.toString())
     setCalculatedFee(fee)

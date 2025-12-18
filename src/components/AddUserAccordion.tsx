@@ -24,7 +24,6 @@ export const AddUserAccordion = forwardRef<
   AddUserAccordionRef,
   AddUserAccordionProps
 >(({ accordionValue, setAccordionValue, form }, ref) => {
-  console.log('Accordion Value:', accordionValue)
 
   useImperativeHandle(ref, () => ({
     submitForm: async () => {

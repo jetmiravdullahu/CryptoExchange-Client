@@ -68,7 +68,7 @@ export const ExchangeSection = () => {
       (asset) => asset.class !== assetOptions[0].class,
     )!.value,
   })
-
+  
   const {
     assetFrom,
     setAssetFrom,
@@ -97,7 +97,7 @@ export const ExchangeSection = () => {
     initialFeeValue: currentLocationFee.fee_value.toString(),
   })
 
-  const handleReviewTrade = async () => {
+  const handleReviewTrade = () => {
     if (!amountFrom || !amountTo || !exchangeRate) {
       toast.error('Please enter valid amounts to trade.')
       return

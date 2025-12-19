@@ -196,7 +196,9 @@ function RouteComponent() {
                 </span>
                 <span className="font-medium text-destructive">
                   - {parseFloat(exchangeData.fee_flat).toFixed(2)}{' '}
-                  {exchangeData.from_asset.name}
+                  {exchangeData.from_asset.asset_class === 'FIAT'
+                    ? exchangeData.from_asset.name
+                    : exchangeData.to_asset.name}
                 </span>
               </div>
             </div>

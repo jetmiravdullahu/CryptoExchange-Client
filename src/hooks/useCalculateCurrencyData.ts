@@ -49,7 +49,7 @@ export const useExchangeCalculator = (
 ): UseExchangeCalculatorReturn => {
   const queryClient = useQueryClient()
 
-    const { data: assetOptions } = useGetAssetOptions()
+  const { data: assetOptions } = useGetAssetOptions()
   // Asset configurations
   const [assetFrom, setAssetFromState] = useState<Asset>(
     config.initialAssetFrom,
@@ -280,17 +280,17 @@ export const useExchangeCalculator = (
 
   const setAssetFrom = async (asset: Asset): Promise<void> => {
     let rate = '0'
-    if(asset.class !== assetFrom.class) {
-      setAssetToState(assetOptions.find(
-        (a) => a.class !== asset.class,
-      )!)
+    const newAssetTo = assetOptions.find((a => a.class !== asset.class))
+    if (asset.class !== assetFrom.class) {
+      setAssetToState(newAssetTo!)
     }
     try {
-      if (asset.value !== assetTo.value) {
+        console.log({ asset, assetTo })
+      if (asset.value !== newAssetTo!.value) {
         const rateResp = await queryClient.ensureQueryData(
           getCurrentExchangeRateQuery({
             from_asset_id: asset.value,
-            to_asset_id: assetTo.value,
+            to_asset_id: newAssetTo!.value,
           }),
         )
         rate = rateResp.rate
@@ -298,7 +298,7 @@ export const useExchangeCalculator = (
     } catch (error) {
       console.error('Error fetching exchange rate:', error)
     }
-
+    
     const { result, fee } = calculateForward({
       assetFromInput: asset,
       amountFromInput: amountFrom,
@@ -370,7 +370,6 @@ export const useExchangeCalculator = (
     const currAssetTo = assetOptions.find(
       (asset) => asset.value === assetTo.value,
     )!
-
 
     try {
       if (assetTo.value !== assetFrom.value) {

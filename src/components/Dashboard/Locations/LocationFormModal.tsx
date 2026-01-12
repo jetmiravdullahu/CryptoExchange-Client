@@ -49,7 +49,7 @@ export function LocationFormDialog({
       code: initialData.code,
       address: initialData.address,
       city: initialData.city,
-      user_id: initialData.user.id,
+      user_id: initialData.user?.id,
       fee_type: initialData.fee_type,
       fee_value: initialData.fee_value,
     },
@@ -98,6 +98,8 @@ export function LocationFormDialog({
 
   const formStore = useStore(form.store).values
 
+  console.log({ formStore })
+
   return (
     <Dialog open={open} onOpenChange={() => onOpenChange(null)}>
       <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
@@ -145,7 +147,7 @@ export function LocationFormDialog({
             <form.AppField name="is_active">
               {(field) => (
                 <div className="mt-8">
-                  <field.Switch label="Is Active" />
+                  <field.Switch disabled={formStore.user_id === undefined} label="Is Active" />
                 </div>
               )}
             </form.AppField>
@@ -156,15 +158,15 @@ export function LocationFormDialog({
                   placeholder="User"
                   disabled={sellers.length === 0}
                   options={
-                    initialData.user.id &&
-                    !sellers.find((s) => s.value === initialData.user.id)
+                    initialData.user?.id &&
+                      !sellers.find((s) => s.value === initialData.user.id)
                       ? [
-                          ...sellers,
-                          {
-                            label: initialData.user.name,
-                            value: initialData.user.id,
-                          },
-                        ]
+                        ...sellers,
+                        {
+                          label: initialData.user.name,
+                          value: initialData.user.id,
+                        },
+                      ]
                       : sellers
                   }
                 />

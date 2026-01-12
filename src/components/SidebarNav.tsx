@@ -81,7 +81,7 @@ export const SidebarNav = ({
               className={cn(
                 'w-full justify-start gap-3',
                 isActive &&
-                  'bg-primary text-sidebar-foreground! hover:text-sidebar-primary! dark:text-sidebar-accent',
+                'bg-primary/70 text-sidebar-foreground! hover:text-sidebar-primary! dark:text-sidebar-accent',
                 !mobile && isCollapsed && 'justify-center px-2',
               )}
             >

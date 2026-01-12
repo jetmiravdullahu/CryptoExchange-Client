@@ -14,7 +14,7 @@ import { Switch as ShadcnSwitch } from '@/components/ui/switch'
 import { Textarea as ShadcnTextarea } from '@/components/ui/textarea'
 import { useFieldContext, useFormContext } from '@/hooks/form-context'
 
-export function SubscribeButton({ label, className }: { label: string | React.ReactNode ; className?: string }) {
+export function SubscribeButton({ label, className }: { label: string | React.ReactNode; className?: string }) {
   const form = useFormContext()
   return (
     <form.Subscribe selector={(state) => state.isSubmitting}>
@@ -238,7 +238,7 @@ export function CalendarField({
   )
 }
 
-export function Switch({ label }: { label: string }) {
+export function Switch({ label, disabled }: { label: string; disabled?: boolean }) {
   const field = useFieldContext<boolean>()
   const errors = useStore(field.store, (state) => state.meta.errors)
 
@@ -247,6 +247,7 @@ export function Switch({ label }: { label: string }) {
       <LabelMessage label={label} />
       <ShadcnSwitch
         id={label}
+        disabled={disabled}
         onBlur={field.handleBlur}
         checked={field.state.value}
         onCheckedChange={(checked) => field.handleChange(checked)}
